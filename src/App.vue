@@ -2,7 +2,9 @@
   <div id="app">
     <v-toolbar fixed>
       <v-btn icon v-if="hasBackLink">
-        <v-icon>arrow_back</v-icon>
+        <router-link to="/">
+          <v-icon>arrow_back</v-icon>
+        </router-link>
       </v-btn>
 
       <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
@@ -37,5 +39,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+a {
+  text-decoration: none!important;
+  color: inherit;
 }
 </style>
