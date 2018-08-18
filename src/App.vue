@@ -1,61 +1,16 @@
 <template>
   <div id="app">
     <v-toolbar fixed>
-      <v-btn icon>
-        <v-icon>arrow_back</v-icon>
+      <v-btn icon v-if="hasBackLink">
+        <router-link to="/">
+          <v-icon>arrow_back</v-icon>
+        </router-link>
       </v-btn>
 
-      <v-toolbar-title>{{bottomNav}}</v-toolbar-title>
+      <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
     </v-toolbar>
 
-    <router-view/>
-
-    <v-footer fixed height="102">
-      <v-btn
-        absolute
-        dark
-        fab
-        top
-        right
-        color="teal"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
-
-      <v-bottom-nav
-        :active.sync="bottomNav"
-        :value="true"
-        absolute
-        color="transparent"
-      >
-        <v-btn
-          color="teal"
-          flat
-          value="recent"
-        >
-          <span>Recent</span>
-          <v-icon>history</v-icon>
-        </v-btn>
-
-        <v-btn
-          color="teal"
-          flat
-          value="favorites"
-        >
-          <span>Favorites</span>
-          <v-icon>favorite</v-icon>
-        </v-btn>
-
-        <v-btn
-          color="teal"
-          flat
-          value="nearby"
-        >
-          <span>Nearby</span>
-          <v-icon>place</v-icon>
-        </v-btn>
-      </v-bottom-nav>
-    </v-footer>
+    <router-view @syncHeader="syncHeader"/>
   </div>
 </template>
 
@@ -64,7 +19,14 @@ export default {
   name: 'App',
   data () {
     return {
-      bottomNav: 'recent'
+      pageTitle: '',
+      hasBackLink: false
+    }
+  },
+  methods: {
+    syncHeader (pageTitle) {
+      this.pageTitle = pageTitle
+      this.hasBackLink = this.$route.meta.backLink
     }
   }
 }
@@ -77,7 +39,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-  margin-bottom: 80px;
+}
+a {
+  text-decoration: none!important;
+  color: inherit;
 }
 </style>
