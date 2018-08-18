@@ -69,6 +69,7 @@
           color="teal"
           flat
           value="recent"
+          @click="syncHeader('recent')"
         >
           <span>Recent</span>
           <v-icon>history</v-icon>
@@ -78,6 +79,7 @@
           color="teal"
           flat
           value="favorites"
+          @click="syncHeader('favorites')"
         >
           <span>Favorites</span>
           <v-icon>favorite</v-icon>
@@ -87,6 +89,7 @@
           color="teal"
           flat
           value="nearby"
+          @click="syncHeader('nearby')"
         >
           <span>Nearby</span>
           <v-icon>place</v-icon>
@@ -99,20 +102,34 @@
 <script>
 export default {
   name: 'Index',
-  data: () => ({
-    cards: [
-      { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flexXs: 12, flexSm: 12 },
-      { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flexXs: 12, flexSm: 6 },
-      { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flexXs: 12, flexSm: 6 },
-      { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flexXs: 6, flexSm: 3 },
-      { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flexXs: 6, flexSm: 3 },
-      { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flexXs: 6, flexSm: 3 },
-      { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flexXs: 6, flexSm: 3 }
-    ]
-  })
+  data () {
+    return {
+      bottomNav: 'recent',
+      cards: [
+        { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flexXs: 12, flexSm: 12 },
+        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flexXs: 12, flexSm: 6 },
+        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flexXs: 12, flexSm: 6 },
+        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flexXs: 6, flexSm: 3 },
+        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flexXs: 6, flexSm: 3 },
+        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flexXs: 6, flexSm: 3 },
+        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flexXs: 6, flexSm: 3 }
+      ]
+    }
+  },
+  created () {
+    this.syncHeader(this.bottomNav)
+  },
+  methods: {
+    syncHeader (pageTitle) {
+      this.$emit('syncHeader', pageTitle)
+    }
+  }
 }
 </script>
 
-
 <style scoped>
+.index {
+  margin-top: 60px;
+  margin-bottom: 80px;
+}
 </style>

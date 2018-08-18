@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <v-toolbar fixed>
-      <v-btn icon>
+      <v-btn icon v-if="hasBackLink">
         <v-icon>arrow_back</v-icon>
       </v-btn>
 
-      <v-toolbar-title>{{bottomNav}}</v-toolbar-title>
+      <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
     </v-toolbar>
 
-    <router-view/>
+    <router-view @syncHeader="syncHeader"/>
   </div>
 </template>
 
@@ -17,7 +17,14 @@ export default {
   name: 'App',
   data () {
     return {
-      bottomNav: 'recent'
+      pageTitle: '',
+      hasBackLink: false
+    }
+  },
+  methods: {
+    syncHeader (pageTitle) {
+      this.pageTitle = pageTitle
+      this.hasBackLink = this.$route.meta.backLink
     }
   }
 }
@@ -30,7 +37,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-  margin-bottom: 80px;
 }
 </style>

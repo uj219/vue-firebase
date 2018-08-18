@@ -11,12 +11,14 @@ export default new Router({
     {
       path: '/',
       name: 'Index',
-      component: Index
+      component: Index,
+      meta: { backLink: false }
     },
     {
       path: '/item/:id',
       name: 'Detail',
-      component: Detail
+      component: Detail,
+      meta: { backLink: true }
     }
   ]
 })
