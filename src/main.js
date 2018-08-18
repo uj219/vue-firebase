@@ -6,6 +6,10 @@ import router from './router';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import firebaseConfig from './api_keys/firebase';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+
+Vue.use(Vuetify);
 
 firebase.initializeApp(firebaseConfig);
 const db = firebaseApp.firestore();
