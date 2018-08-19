@@ -8,7 +8,7 @@
         top
         right
         color="teal"
-        @click.stop=""
+        @click.stop="syncDialog(true)"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -68,6 +68,9 @@ export default {
   methods: {
     syncHeader (pageTitle) {
       this.$emit('syncHeader', pageTitle)
+    },
+    syncDialog (bool) {
+      this.$emit('syncDialog', bool)
     }
   }
 }
