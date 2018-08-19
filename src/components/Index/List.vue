@@ -11,7 +11,7 @@
             [`xs${card.flexXs}`]: true,
             [`sm${card.flexSm}`]: true
           }"
-          :key="card.title"
+          :key="card.id"
         >
           <v-card>
             <router-link :to="`/item/${card.id}`">
