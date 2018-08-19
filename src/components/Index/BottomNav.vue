@@ -8,7 +8,7 @@
         top
         right
         color="teal"
-        @click.stop="dialog = true"
+        @click.stop=""
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -56,9 +56,18 @@
 <script>
 export default {
   name: 'BottomNav',
+  props: ['current'],
   data () {
     return {
-      bottomNav: 'recent'
+      bottomNav: ''
+    }
+  },
+  created () {
+    this.bottomNav = this.$props.current
+  },
+  methods: {
+    syncHeader (pageTitle) {
+      this.$emit('syncHeader', pageTitle)
     }
   }
 }

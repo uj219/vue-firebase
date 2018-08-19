@@ -91,6 +91,7 @@
 <script>
 export default {
   name: 'AddModal',
+  props: ['is-shown'],
   data () {
     return {
       dialog: false

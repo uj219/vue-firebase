@@ -1,8 +1,8 @@
 <template>
   <div class="index">
-    <list />
-    <bottom-nav />
-    <add-modal />
+    <list :cards="cards" />
+    <bottom-nav :current="bottomNav" @syncHeader="syncHeader"/>
+    <add-modal :is-shown="dialog"/>
   </div>
 </template>
 
