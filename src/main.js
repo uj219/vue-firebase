@@ -10,7 +10,17 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#009688',
+    secondary: '#00897B',
+    accent: '#009688',
+    error: '#f44336',
+    warning: '#FDD835',
+    info: '#009688',
+    success: '#009688'
+  }
+})
 
 firebase.initializeApp(firebaseConfig)
 // const db = firebase.firestore()

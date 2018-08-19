@@ -1,16 +1,18 @@
 <template>
   <div id="app">
-    <v-toolbar fixed>
-      <v-btn icon v-if="hasBackLink">
-        <router-link to="/">
-          <v-icon>arrow_back</v-icon>
-        </router-link>
-      </v-btn>
+    <v-app>
+      <v-toolbar fixed>
+        <v-btn icon v-if="hasBackLink">
+          <router-link to="/">
+            <v-icon>arrow_back</v-icon>
+          </router-link>
+        </v-btn>
 
-      <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
-    </v-toolbar>
+        <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
+      </v-toolbar>
 
-    <router-view @syncHeader="syncHeader"/>
+      <router-view @syncHeader="syncHeader"/>
+    </v-app>
   </div>
 </template>
 
