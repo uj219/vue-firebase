@@ -1,8 +1,8 @@
 <template>
   <div class="index">
     <list :cards="cards" />
-    <bottom-nav :current="bottomNav" @syncHeader="syncHeader"/>
-    <add-modal :is-shown="dialog"/>
+    <bottom-nav :current="bottomNav" @syncHeader="syncHeader" @syncDialog="syncDialog" />
+    <add-modal :isShown="dialog" @syncDialog="syncDialog" />
   </div>
 </template>
 
@@ -39,6 +39,9 @@ export default {
   methods: {
     syncHeader (pageTitle) {
       this.$emit('syncHeader', pageTitle)
+    },
+    syncDialog (bool) {
+      this.dialog = bool
     }
   }
 }

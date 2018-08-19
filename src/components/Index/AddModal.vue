@@ -1,7 +1,7 @@
 <template>
   <div class="add-modal">
     <v-dialog
-      v-model="dialog"
+      v-model="isShown"
       fullscreen
       hide-overlay
       transition="dialog-bottom-transition"
@@ -9,13 +9,13 @@
     >
       <v-card tile>
         <v-toolbar card dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
+          <v-btn icon dark @click.stop="syncDialog(false)">
             <v-icon>close</v-icon>
           </v-btn>
           <v-toolbar-title>Settings</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="dialog = false">Save</v-btn>
+            <v-btn dark flat @click.stop="syncDialog(false)">Save</v-btn>
           </v-toolbar-items>
           <v-menu bottom right offset-y>
             <v-btn slot="activator" dark icon>
@@ -91,10 +91,10 @@
 <script>
 export default {
   name: 'AddModal',
-  props: ['is-shown'],
-  data () {
-    return {
-      dialog: false
+  props: ['isShown'],
+  methods: {
+    syncDialog (bool) {
+      this.$emit('syncDialog', bool)
     }
   }
 }
