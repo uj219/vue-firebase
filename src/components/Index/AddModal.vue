@@ -12,74 +12,73 @@
           <v-btn icon dark @click.stop="syncDialog(false)">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Settings</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn dark flat @click.stop="syncDialog(false)">Save</v-btn>
-          </v-toolbar-items>
-          <v-menu bottom right offset-y>
-            <v-btn slot="activator" dark icon>
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-            <v-list>
-              <v-list-tile v-for="(item, i) in items" :key="i">
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
+          <v-toolbar-title>Add item</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-btn color="primary" dark @click.stop="dialog2 = !dialog2">Open Dialog 2</v-btn>
-          <v-tooltip right>
-            <v-btn slot="activator">Tool Tip Activator</v-btn>
-            Tool Tip
-          </v-tooltip>
-          <v-list three-line subheader>
-            <v-subheader>User Controls</v-subheader>
-            <v-list-tile avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>Content filtering</v-list-tile-title>
-                <v-list-tile-sub-title>Set the content filtering level to restrict apps that can be downloaded</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>Password</v-list-tile-title>
-                <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-          <v-divider></v-divider>
-          <v-list three-line subheader>
-            <v-subheader>General</v-subheader>
-            <v-list-tile avatar>
-              <v-list-tile-action>
-                <v-checkbox v-model="notifications"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Notifications</v-list-tile-title>
-                <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile avatar>
-              <v-list-tile-action>
-                <v-checkbox v-model="sound"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Sound</v-list-tile-title>
-                <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile avatar>
-              <v-list-tile-action>
-                <v-checkbox v-model="widgets"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Auto-add widgets</v-list-tile-title>
-                <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
+          <v-stepper v-model="e1">
+            <v-stepper-header>
+              <v-stepper-step :complete="e1 > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="e1 > 2" step="2" editable>エリア選択</v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step step="3">追加アイテムの選択</v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <v-list two-line subheader>
+                  <v-subheader inset>検索方法</v-subheader>
+                  <v-list-tile v-for="item in items" :key="item.title" avatar @click="e1 = 2">
+                    <v-list-tile-avatar>
+                      <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                      <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                ></v-card>
+
+                <v-btn
+                  color="primary"
+                  @click="e1 = 3"
+                >
+                  Continue
+                </v-btn>
+
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <v-card
+                  class="mb-5"
+                  color="grey lighten-1"
+                  height="200px"
+                ></v-card>
+
+                <v-btn
+                  color="primary"
+                  @click="e1 = 1"
+                >
+                  Continue
+                </v-btn>
+
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
         </v-card-text>
 
         <div style="flex: 1 1 auto;"></div>
@@ -92,6 +91,15 @@
 export default {
   name: 'AddModal',
   props: ['isShown'],
+  data () {
+    return {
+      e1: 0,
+      items: [
+        { icon: 'place', iconClass: 'teal white--text', title: 'エリアから探す' },
+        { icon: 'near_me', iconClass: 'teal white--text', title: '現在地から探す' }
+      ]
+    }
+  },
   methods: {
     syncDialog (bool) {
       this.$emit('syncDialog', bool)
@@ -101,4 +109,8 @@ export default {
 </script>
 
 <style scoped>
+.v-stepper__content {
+  padding-right: 0;
+  padding-left: 0;
+}
 </style>
