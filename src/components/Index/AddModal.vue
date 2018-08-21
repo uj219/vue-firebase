@@ -21,7 +21,7 @@
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="e1 > 2" step="2" editable>エリア選択</v-stepper-step>
+              <v-stepper-step :complete="e1 > 2" step="2">エリア選択</v-stepper-step>
 
               <v-divider></v-divider>
 
@@ -30,9 +30,8 @@
 
             <v-stepper-items>
               <v-stepper-content step="1">
-                <v-list two-line subheader>
-                  <v-subheader inset>検索方法</v-subheader>
-                  <v-list-tile v-for="item in items" :key="item.title" avatar @click="e1 = 2">
+                <v-list two-line>
+                  <v-list-tile v-for="item in items1" :key="item.title" avatar @click="e1 = 2">
                     <v-list-tile-avatar>
                       <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
                     </v-list-tile-avatar>
@@ -45,11 +44,49 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
+                <v-container fluid grid-list-xl>
+                  <v-layout wrap align-center>
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items2"
+                        label="large_service_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items3"
+                        label="service_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items4"
+                        label="large_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items5"
+                        label="middle_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items6"
+                        label="small_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
 
                 <v-btn
                   color="primary"
@@ -62,11 +99,32 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
+                <v-layout row>
+                  <v-flex xs12 sm6 offset-sm3>
+                    <v-list>
+                      <v-list-tile
+                        v-for="item in items7"
+                        :key="item.title"
+                        @click=""
+                      >
+                        <v-list-tile-avatar>
+                          <img :src="item.avatar">
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                          <v-list-tile-title v-html="item.title"></v-list-tile-title>
+                          <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+                        </v-list-tile-content>
+
+                        <v-list-tile-action>
+                          <v-icon :color="item.active ? 'teal' : 'grey'">add_circle</v-icon>
+                        </v-list-tile-action>
+                      </v-list-tile>
+                    </v-list>
+
+                    <v-divider></v-divider>
+                  </v-flex>
+                </v-layout>
 
                 <v-btn
                   color="primary"
@@ -94,9 +152,31 @@ export default {
   data () {
     return {
       e1: 0,
-      items: [
+      items1: [
         { icon: 'place', iconClass: 'teal white--text', title: 'エリアから探す' },
         { icon: 'near_me', iconClass: 'teal white--text', title: '現在地から探す' }
+      ],
+      select: 'Programming',
+      items2: [
+        'Programming',
+        'Design',
+        'Vue',
+        'Vuetify'
+      ],
+      items3: [],
+      items4: [],
+      items5: [],
+      items6: [],
+      items7: [
+        {
+          active: true,
+          title: 'Jason Oner',
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+          subtitle: '<span class="text--primary">Ali Connors</span> &mdash; Ill be in your neighborhood doing errands this weekend. Do you want to hang out?'
+        },
+        { active: true, title: 'Ranee Carlson', avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
+        { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
+        { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' }
       ]
     }
   },
