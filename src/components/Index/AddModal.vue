@@ -168,13 +168,30 @@
           <v-btn
             color="teal"
             flat="flat"
-            @click="confirmDialog = false"
+            @click="snackbar = true"
           >
             追加
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="snackbar"
+      :color="color"
+      :multi-line="mode === 'multi-line'"
+      :timeout="timeout"
+      :vertical="mode === 'vertical'"
+    >
+      {{ text }}
+      <v-btn
+        dark
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -211,7 +228,12 @@ export default {
         { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
         { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' }
       ],
-      confirmDialog: false
+      confirmDialog: false,
+      snackbar: false,
+      color: 'teal',
+      mode: '',
+      timeout: 3000,
+      text: 'アイテムを追加しました'
     }
   },
   methods: {
