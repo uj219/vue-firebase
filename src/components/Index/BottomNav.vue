@@ -17,7 +17,7 @@
         :active.sync="bottomNav"
         :value="true"
         absolute
-        color="transparent"
+        color="white"
       >
         <v-btn
           color="teal"
@@ -75,3 +75,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.v-footer {
+  background: transparent;
+}
+</style>
