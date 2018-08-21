@@ -12,79 +12,186 @@
           <v-btn icon dark @click.stop="syncDialog(false)">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Settings</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn dark flat @click.stop="syncDialog(false)">Save</v-btn>
-          </v-toolbar-items>
-          <v-menu bottom right offset-y>
-            <v-btn slot="activator" dark icon>
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-            <v-list>
-              <v-list-tile v-for="(item, i) in items" :key="i">
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
+          <v-toolbar-title>Add item</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-btn color="primary" dark @click.stop="dialog2 = !dialog2">Open Dialog 2</v-btn>
-          <v-tooltip right>
-            <v-btn slot="activator">Tool Tip Activator</v-btn>
-            Tool Tip
-          </v-tooltip>
-          <v-list three-line subheader>
-            <v-subheader>User Controls</v-subheader>
-            <v-list-tile avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>Content filtering</v-list-tile-title>
-                <v-list-tile-sub-title>Set the content filtering level to restrict apps that can be downloaded</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>Password</v-list-tile-title>
-                <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-          <v-divider></v-divider>
-          <v-list three-line subheader>
-            <v-subheader>General</v-subheader>
-            <v-list-tile avatar>
-              <v-list-tile-action>
-                <v-checkbox v-model="notifications"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Notifications</v-list-tile-title>
-                <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile avatar>
-              <v-list-tile-action>
-                <v-checkbox v-model="sound"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Sound</v-list-tile-title>
-                <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile avatar>
-              <v-list-tile-action>
-                <v-checkbox v-model="widgets"></v-checkbox>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Auto-add widgets</v-list-tile-title>
-                <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
+          <v-stepper v-model="step">
+            <v-stepper-header>
+              <v-stepper-step :complete="step > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">エリア選択</v-stepper-step>
+
+              <v-divider></v-divider>
+
+              <v-stepper-step step="3">追加アイテムの選択</v-stepper-step>
+            </v-stepper-header>
+
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <v-list two-line>
+                  <v-list-tile v-for="item in items1" :key="item.title" avatar @click="step = 2">
+                    <v-list-tile-avatar>
+                      <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                      <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-stepper-content>
+
+              <v-stepper-content step="2">
+                <v-container fluid grid-list-xl>
+                  <v-layout wrap align-center>
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items2"
+                        label="large_service_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items3"
+                        label="service_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items4"
+                        label="large_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items5"
+                        label="middle_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 d-flex>
+                      <v-select
+                        :items="items6"
+                        label="small_area"
+                        outline
+                      ></v-select>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+
+                <v-btn
+                  color="primary"
+                  @click="step = 3"
+                >
+                  Continue
+                </v-btn>
+
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <v-layout row>
+                  <v-flex xs12 sm6 offset-sm3>
+                    <v-list>
+                      <v-list-tile
+                        v-for="item in items7"
+                        :key="item.title"
+                        @click.stop="confirmDialog = true"
+                      >
+                        <v-list-tile-avatar>
+                          <img :src="item.avatar">
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                          <v-list-tile-title v-html="item.title"></v-list-tile-title>
+                          <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+                        </v-list-tile-content>
+
+                        <v-list-tile-action v-if="item.active">
+                          <v-icon color="teal">add_circle</v-icon>
+                        </v-list-tile-action>
+                      </v-list-tile>
+                    </v-list>
+
+                    <v-divider></v-divider>
+                  </v-flex>
+                </v-layout>
+
+                <v-btn
+                  color="primary"
+                  @click="step = 1"
+                >
+                  Continue
+                </v-btn>
+
+                <v-btn flat>Cancel</v-btn>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
         </v-card-text>
 
         <div style="flex: 1 1 auto;"></div>
       </v-card>
     </v-dialog>
+
+    <v-dialog
+      v-model="confirmDialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">このアイテムを追加しますか?</v-card-title>
+
+        <v-card-text>
+          ここにアイテム情報を表示
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="grey lighten-1"
+            flat="flat"
+            @click="confirmDialog = false"
+          >
+            キャンセル
+          </v-btn>
+
+          <v-btn
+            color="teal"
+            flat="flat"
+            @click="snackbar = true"
+          >
+            追加
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-snackbar
+      v-model="snackbar"
+      :color="color"
+      :multi-line="mode === 'multi-line'"
+      :timeout="timeout"
+      :vertical="mode === 'vertical'"
+    >
+      {{ text }}
+      <v-btn
+        dark
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -92,6 +199,43 @@
 export default {
   name: 'AddModal',
   props: ['isShown'],
+  data () {
+    return {
+      step: 0,
+      items1: [
+        { icon: 'place', iconClass: 'teal white--text', title: 'エリアから探す' },
+        { icon: 'near_me', iconClass: 'teal white--text', title: '現在地から探す' }
+      ],
+      select: 'Programming',
+      items2: [
+        'Programming',
+        'Design',
+        'Vue',
+        'Vuetify'
+      ],
+      items3: [],
+      items4: [],
+      items5: [],
+      items6: [],
+      items7: [
+        {
+          active: true,
+          title: 'Jason Oner',
+          avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
+          subtitle: '<span class="text--primary">Ali Connors</span> &mdash; Ill be in your neighborhood doing errands this weekend. Do you want to hang out?'
+        },
+        { active: true, title: 'Ranee Carlson', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
+        { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
+        { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' }
+      ],
+      confirmDialog: false,
+      snackbar: false,
+      color: 'teal',
+      mode: '',
+      timeout: 3000,
+      text: 'アイテムを追加しました'
+    }
+  },
   methods: {
     syncDialog (bool) {
       this.$emit('syncDialog', bool)
@@ -101,4 +245,8 @@ export default {
 </script>
 
 <style scoped>
+.v-stepper__content {
+  padding-right: 0;
+  padding-left: 0;
+}
 </style>
