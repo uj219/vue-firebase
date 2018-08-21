@@ -15,13 +15,13 @@
           <v-toolbar-title>Add item</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-stepper v-model="e1">
+          <v-stepper v-model="step">
             <v-stepper-header>
-              <v-stepper-step :complete="e1 > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
+              <v-stepper-step :complete="step > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step :complete="e1 > 2" step="2">エリア選択</v-stepper-step>
+              <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">エリア選択</v-stepper-step>
 
               <v-divider></v-divider>
 
@@ -31,7 +31,7 @@
             <v-stepper-items>
               <v-stepper-content step="1">
                 <v-list two-line>
-                  <v-list-tile v-for="item in items1" :key="item.title" avatar @click="e1 = 2">
+                  <v-list-tile v-for="item in items1" :key="item.title" avatar @click="step = 2">
                     <v-list-tile-avatar>
                       <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
                     </v-list-tile-avatar>
@@ -90,7 +90,7 @@
 
                 <v-btn
                   color="primary"
-                  @click="e1 = 3"
+                  @click="step = 3"
                 >
                   Continue
                 </v-btn>
@@ -105,7 +105,7 @@
                       <v-list-tile
                         v-for="item in items7"
                         :key="item.title"
-                        @click=""
+                        @click.stop="confirmDialog = true"
                       >
                         <v-list-tile-avatar>
                           <img :src="item.avatar">
@@ -116,8 +116,8 @@
                           <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
                         </v-list-tile-content>
 
-                        <v-list-tile-action>
-                          <v-icon :color="item.active ? 'teal' : 'grey'">add_circle</v-icon>
+                        <v-list-tile-action v-if="item.active">
+                          <v-icon color="teal">add_circle</v-icon>
                         </v-list-tile-action>
                       </v-list-tile>
                     </v-list>
@@ -128,7 +128,7 @@
 
                 <v-btn
                   color="primary"
-                  @click="e1 = 1"
+                  @click="step = 1"
                 >
                   Continue
                 </v-btn>
@@ -142,6 +142,39 @@
         <div style="flex: 1 1 auto;"></div>
       </v-card>
     </v-dialog>
+
+    <v-dialog
+      v-model="confirmDialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">このアイテムを追加しますか?</v-card-title>
+
+        <v-card-text>
+          ここにアイテム情報を表示
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="grey lighten-1"
+            flat="flat"
+            @click="confirmDialog = false"
+          >
+            キャンセル
+          </v-btn>
+
+          <v-btn
+            color="teal"
+            flat="flat"
+            @click="confirmDialog = false"
+          >
+            追加
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -151,7 +184,7 @@ export default {
   props: ['isShown'],
   data () {
     return {
-      e1: 0,
+      step: 0,
       items1: [
         { icon: 'place', iconClass: 'teal white--text', title: 'エリアから探す' },
         { icon: 'near_me', iconClass: 'teal white--text', title: '現在地から探す' }
@@ -171,13 +204,14 @@ export default {
         {
           active: true,
           title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+          avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
           subtitle: '<span class="text--primary">Ali Connors</span> &mdash; Ill be in your neighborhood doing errands this weekend. Do you want to hang out?'
         },
-        { active: true, title: 'Ranee Carlson', avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
-        { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
-        { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' }
-      ]
+        { active: true, title: 'Ranee Carlson', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
+        { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
+        { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' }
+      ],
+      confirmDialog: false
     }
   },
   methods: {
