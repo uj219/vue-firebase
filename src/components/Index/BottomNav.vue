@@ -8,7 +8,7 @@
         top
         right
         color="teal"
-        @click.stop="syncDialog(true)"
+        @click.stop="syncAddModal(true)"
       >
         <v-icon>add</v-icon>
       </v-btn>
@@ -69,8 +69,8 @@ export default {
     syncHeader (pageTitle) {
       this.$emit('syncHeader', pageTitle)
     },
-    syncDialog (bool) {
-      this.$emit('syncDialog', bool)
+    syncAddModal (bool) {
+      this.$emit('syncAddModal', bool)
     }
   }
 }

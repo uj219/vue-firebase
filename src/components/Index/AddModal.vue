@@ -9,7 +9,7 @@
     >
       <v-card tile>
         <v-toolbar card dark color="primary">
-          <v-btn icon dark @click.stop="syncDialog(false)">
+          <v-btn icon dark @click.stop="syncAddModal(false)">
             <v-icon>close</v-icon>
           </v-btn>
           <v-toolbar-title>Add item</v-toolbar-title>
@@ -138,8 +138,6 @@
             </v-stepper-items>
           </v-stepper>
         </v-card-text>
-
-        <div style="flex: 1 1 auto;"></div>
       </v-card>
     </v-dialog>
 
@@ -237,8 +235,8 @@ export default {
     }
   },
   methods: {
-    syncDialog (bool) {
-      this.$emit('syncDialog', bool)
+    syncAddModal (bool) {
+      this.$emit('syncAddModal', bool)
     }
   }
 }

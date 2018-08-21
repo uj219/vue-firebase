@@ -6,17 +6,17 @@
     >
       <v-layout row wrap>
         <v-flex
-          v-for="card in cards"
+          v-for="item in list"
           v-bind="{
-            [`xs${card.flexXs}`]: true,
-            [`sm${card.flexSm}`]: true
+            [`xs${item.flexXs}`]: true,
+            [`sm${item.flexSm}`]: true
           }"
-          :key="card.id"
+          :key="item.id"
         >
           <v-card>
-            <router-link :to="`/item/${card.id}`">
+            <router-link :to="`/item/${item.id}`">
               <v-card-media
-                :src="card.src"
+                :src="item.src"
                 height="200px"
               >
                 <v-container
@@ -26,7 +26,7 @@
                 >
                   <v-layout fill-height>
                     <v-flex xs12 align-end flexbox>
-                      <span class="headline white--text" v-text="card.title"></span>
+                      <span class="headline white--text" v-text="item.title"></span>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -56,9 +56,6 @@
 <script>
 export default {
   name: 'List',
-  props: ['cards']
+  props: ['list']
 }
 </script>
-
-<style scoped>
-</style>
