@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-import hotPepperApiKey from '../../../api_keys/hotpepper';
+import axios from 'axios'
+import hotPepperApiKey from '../../../api_keys/hotpepper'
 
 export default {
   name: 'stepperContentAreaSearch',
@@ -93,13 +93,13 @@ export default {
       const params = Object.assign({
         key: hotPepperApiKey,
         format: 'json'
-      }, options);
+      }, options)
 
-      axios.get(`http://webservice.recruit.co.jp/hotpepper/${area}/v1/`,{
+      axios.get(`http://webservice.recruit.co.jp/hotpepper/${area}/v1/`, {
         params: params
       }).then((response) => {
         // 都度空にする
-        this.$data[area] = [];
+        this.$data[area] = []
 
         response.data.results[area].forEach((el) => {
           this.$data[area].push(el)
@@ -107,10 +107,10 @@ export default {
       }).catch((error) => {
         // todo: snackbarで表示
         console.log(error)
-      });
+      })
     },
     search () {
-      if (!this.$refs.form.validate()) return;
+      if (!this.$refs.form.validate()) return
       this.$emit('search', {small_area: this.small_area_selected})
     },
     changeStep (num) {

@@ -1,3 +1,3 @@
-const hotpepperApiKey = '';
+const hotpepperApiKey = ''
 
-export default hotpepperApiKey;
+export default hotpepperApiKey
