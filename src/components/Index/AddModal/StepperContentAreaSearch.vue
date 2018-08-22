@@ -1,5 +1,9 @@
 <template>
   <div class="stepper-content-area-search">
+    <v-subheader>
+      <v-icon>place</v-icon>
+      エリアから探す
+    </v-subheader>
     <v-form v-model="valid" ref="form" lazy-validation>
       <v-container fluid grid-list-xl>
         <v-layout wrap align-center>

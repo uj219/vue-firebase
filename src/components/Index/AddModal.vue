@@ -50,6 +50,7 @@
 
               <v-stepper-content step="2">
                 <stepper-content-area-search v-if="searchType === 'area'" />
+                <stepper-content-gps-search v-if="searchType === 'gps'" />
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -149,27 +150,19 @@
 
 <script>
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
+import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
 
 export default {
   name: 'AddModal',
   components: {
-    'stepper-content-area-search': StepperContentAreaSearch
+    'stepper-content-area-search': StepperContentAreaSearch,
+    'stepper-content-gps-search': StepperContentGpsSearch
   },
   props: ['isShown'],
   data () {
     return {
       step: 0,
       searchType: '',
-      items2: [
-        'Programming',
-        'Design',
-        'Vue',
-        'Vuetify'
-      ],
-      items3: [],
-      items4: [],
-      items5: [],
-      items6: [],
       items7: [
         {
           active: true,
