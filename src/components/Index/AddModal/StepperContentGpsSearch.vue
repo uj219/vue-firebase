@@ -46,7 +46,7 @@
             <v-btn
               v-if="valid"
               color="primary"
-              @click="search"
+              @click="setSearchOptions"
             >
               Search
             </v-btn>
@@ -114,9 +114,9 @@ export default {
         this.locationAvailable = false
       }
     },
-    search () {
+    setSearchOptions () {
       if (!this.$refs.form.validate()) return
-      this.$emit('search', {
+      this.$emit('setSearchOptions', {
         lat: this.latitude,
         lng: this.longitude,
         range: this.range

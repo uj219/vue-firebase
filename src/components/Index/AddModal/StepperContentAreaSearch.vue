@@ -51,7 +51,7 @@
             <v-btn
               v-if="small_area_selected.length"
               color="primary"
-              @click="search"
+              @click="setSearchOptions"
             >
               Search
             </v-btn>
@@ -113,9 +113,9 @@ export default {
         console.log(error)
       })
     },
-    search () {
+    setSearchOptions () {
       if (!this.$refs.form.validate()) return
-      this.$emit('search', {
+      this.$emit('setSearchOptions', {
         small_area: this.small_area_selected.join(',')
       })
     },
