@@ -37,7 +37,7 @@
                     </v-list-tile-content>
                   </v-list-tile>
 
-                  <v-list-tile avatar @click="searchType = 'current'; step = 2">
+                  <v-list-tile avatar @click="searchType = 'gps'; step = 2">
                     <v-list-tile-avatar>
                       <v-icon class="teal white--text">near_me</v-icon>
                     </v-list-tile-avatar>
@@ -49,58 +49,7 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <v-container fluid grid-list-xl v-if="searchType === 'area'">
-                  <v-layout wrap align-center>
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items2"
-                        label="large_service_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items3"
-                        label="service_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items4"
-                        label="large_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items5"
-                        label="middle_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items6"
-                        label="small_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-
-                <v-btn
-                  color="primary"
-                  @click="step = 3"
-                >
-                  Continue
-                </v-btn>
-
-                <v-btn flat>Cancel</v-btn>
+                <stepper-content-area-search v-if="searchType === 'area'" />
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -199,8 +148,13 @@
 </template>
 
 <script>
+import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
+
 export default {
   name: 'AddModal',
+  components: {
+    'stepper-content-area-search': StepperContentAreaSearch
+  },
   props: ['isShown'],
   data () {
     return {
