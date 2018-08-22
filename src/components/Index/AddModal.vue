@@ -14,37 +14,42 @@
           </v-btn>
           <v-toolbar-title>Add item</v-toolbar-title>
         </v-toolbar>
+
         <v-card-text>
           <v-stepper v-model="step">
             <v-stepper-header>
               <v-stepper-step :complete="step > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
-
               <v-divider></v-divider>
-
               <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">エリア選択</v-stepper-step>
-
               <v-divider></v-divider>
-
               <v-stepper-step step="3">追加アイテムの選択</v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
               <v-stepper-content step="1">
                 <v-list two-line>
-                  <v-list-tile v-for="item in items1" :key="item.title" avatar @click="step = 2">
+                  <v-list-tile avatar @click="searchType = 'area'; step = 2">
                     <v-list-tile-avatar>
-                      <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
+                      <v-icon class="teal white--text">place</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                      <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                      <v-list-tile-title>エリアから探す</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+
+                  <v-list-tile avatar @click="searchType = 'current'; step = 2">
+                    <v-list-tile-avatar>
+                      <v-icon class="teal white--text">near_me</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>現在地から探す</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-list>
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <v-container fluid grid-list-xl>
+                <v-container fluid grid-list-xl v-if="searchType === 'area'">
                   <v-layout wrap align-center>
                     <v-flex xs12 d-flex>
                       <v-select
@@ -200,11 +205,7 @@ export default {
   data () {
     return {
       step: 0,
-      items1: [
-        { icon: 'place', iconClass: 'teal white--text', title: 'エリアから探す' },
-        { icon: 'near_me', iconClass: 'teal white--text', title: '現在地から探す' }
-      ],
-      select: 'Programming',
+      searchType: '',
       items2: [
         'Programming',
         'Design',
