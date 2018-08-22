@@ -14,88 +14,42 @@
           </v-btn>
           <v-toolbar-title>Add item</v-toolbar-title>
         </v-toolbar>
+
         <v-card-text>
           <v-stepper v-model="step">
             <v-stepper-header>
               <v-stepper-step :complete="step > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
-
               <v-divider></v-divider>
-
               <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">エリア選択</v-stepper-step>
-
               <v-divider></v-divider>
-
               <v-stepper-step step="3">追加アイテムの選択</v-stepper-step>
             </v-stepper-header>
 
             <v-stepper-items>
               <v-stepper-content step="1">
                 <v-list two-line>
-                  <v-list-tile v-for="item in items1" :key="item.title" avatar @click="step = 2">
+                  <v-list-tile avatar @click="searchType = 'area'; step = 2">
                     <v-list-tile-avatar>
-                      <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
+                      <v-icon class="teal white--text">place</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                      <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                      <v-list-tile-title>エリアから探す</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+
+                  <v-list-tile avatar @click="searchType = 'gps'; step = 2">
+                    <v-list-tile-avatar>
+                      <v-icon class="teal white--text">near_me</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>現在地から探す</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-list>
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <v-container fluid grid-list-xl>
-                  <v-layout wrap align-center>
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items2"
-                        label="large_service_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items3"
-                        label="service_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items4"
-                        label="large_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items5"
-                        label="middle_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs12 d-flex>
-                      <v-select
-                        :items="items6"
-                        label="small_area"
-                        outline
-                      ></v-select>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-
-                <v-btn
-                  color="primary"
-                  @click="step = 3"
-                >
-                  Continue
-                </v-btn>
-
-                <v-btn flat>Cancel</v-btn>
+                <stepper-content-area-search v-if="searchType === 'area'" />
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -194,17 +148,18 @@
 </template>
 
 <script>
+import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
+
 export default {
   name: 'AddModal',
+  components: {
+    'stepper-content-area-search': StepperContentAreaSearch
+  },
   props: ['isShown'],
   data () {
     return {
       step: 0,
-      items1: [
-        { icon: 'place', iconClass: 'teal white--text', title: 'エリアから探す' },
-        { icon: 'near_me', iconClass: 'teal white--text', title: '現在地から探す' }
-      ],
-      select: 'Programming',
+      searchType: '',
       items2: [
         'Programming',
         'Design',
