@@ -167,6 +167,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import hotPepperApiKey from '../../api_keys/hotpepper'
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
 import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
 
@@ -181,6 +183,9 @@ export default {
     return {
       step: 0,
       searchType: 'area',
+      searchOffset: 0,
+      searchLimit: 100,
+      searchResults: [],
       items7: [
         {
           active: true,
@@ -212,7 +217,26 @@ export default {
       this.changeStep(2)
     },
     search (options) {
-      
+      const params = Object.assign({
+        key: hotPepperApiKey,
+        format: 'json',
+        start: this.searchOffset,
+        count: this.searchLimit
+      }, options)
+
+      axios.get(`http://webservice.recruit.co.jp/hotpepper/gourmet/v1/`, {
+        params: params
+      }).then((response) => {
+        response.data.results.shop.forEach((el) => {
+          this.searchResults.push(el)
+        })
+
+        if (this.step === 3) return
+        this.changeStep(3)
+      }).catch((error) => {
+        // todo: snackbarで表示
+        console.log(error)
+      })
     }
   }
 }
