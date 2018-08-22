@@ -72,41 +72,7 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <v-layout row>
-                  <v-flex xs12 sm6 offset-sm3>
-                    <v-list>
-                      <v-list-tile
-                        v-for="item in items7"
-                        :key="item.title"
-                        @click.stop="confirmDialog = true"
-                      >
-                        <v-list-tile-avatar>
-                          <img :src="item.avatar">
-                        </v-list-tile-avatar>
-
-                        <v-list-tile-content>
-                          <v-list-tile-title v-html="item.title"></v-list-tile-title>
-                          <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-                        </v-list-tile-content>
-
-                        <v-list-tile-action v-if="item.active">
-                          <v-icon color="teal">add_circle</v-icon>
-                        </v-list-tile-action>
-                      </v-list-tile>
-                    </v-list>
-
-                    <v-divider></v-divider>
-                  </v-flex>
-                </v-layout>
-
-                <v-btn
-                  color="primary"
-                  @click="step = 1"
-                >
-                  Continue
-                </v-btn>
-
-                <v-btn flat>Cancel</v-btn>
+                <stepper-content-list :searchResults="searchResults" :hasMoreResults="hasMoreResults" @changeStep="changeStep" @getMoreItems="getMoreItems"/>
               </v-stepper-content>
             </v-stepper-items>
           </v-stepper>
@@ -171,33 +137,25 @@ import axios from 'axios'
 import hotPepperApiKey from '../../api_keys/hotpepper'
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
 import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
+import StepperContentList from '@/components/Index/AddModal/StepperContentList'
 
 export default {
   name: 'AddModal',
   components: {
     'stepper-content-area-search': StepperContentAreaSearch,
-    'stepper-content-gps-search': StepperContentGpsSearch
+    'stepper-content-gps-search': StepperContentGpsSearch,
+    'stepper-content-list': StepperContentList
   },
   props: ['isShown'],
   data () {
     return {
-      step: 0,
+      step: 1,
       searchType: 'area',
       searchOffset: 1,
       searchLimit: 100,
       searchOptions: {},
       searchResults: [],
-      items7: [
-        {
-          active: true,
-          title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-          subtitle: '<span class="text--primary">Ali Connors</span> &mdash; Ill be in your neighborhood doing errands this weekend. Do you want to hang out?'
-        },
-        { active: true, title: 'Ranee Carlson', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
-        { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
-        { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' }
-      ],
+      hasMoreResults: true,
       confirmDialog: false,
       snackbar: false,
       color: 'teal',
@@ -209,7 +167,7 @@ export default {
   methods: {
     syncAddModal (bool) {
       this.reset()
-      this.step = 0
+      this.step = 1
       this.$emit('syncAddModal', bool)
     },
     changeStep (num) {
@@ -239,6 +197,7 @@ export default {
       axios.get(`http://webservice.recruit.co.jp/hotpepper/gourmet/v1/`, {
         params: params
       }).then((response) => {
+        if (response.data.results.results_returned < this.searchLimit) this.hasMoreResults = false
         response.data.results.shop.forEach((el) => {
           this.searchResults.push(el)
         })
@@ -254,6 +213,7 @@ export default {
       this.searchOptions = {}
       this.searchOffset = 1
       this.searchResults = []
+      this.hasMoreResults = true
     }
   }
 }
