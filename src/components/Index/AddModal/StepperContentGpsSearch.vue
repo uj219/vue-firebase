@@ -1,11 +1,11 @@
 <template>
   <div class="stepper-content-area-search">
-    <v-subheader>
-      <v-icon>near_me</v-icon>
-      現在地から探す
-    </v-subheader>
     <v-form v-model="valid" ref="form" v-if="locationAvailable">
       <v-container>
+        <v-subheader>
+          <v-icon>near_me</v-icon>
+          現在地から探す
+        </v-subheader>
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field

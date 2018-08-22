@@ -20,7 +20,10 @@
             <v-stepper-header>
               <v-stepper-step :complete="step > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
               <v-divider></v-divider>
-              <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">エリア選択</v-stepper-step>
+              <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">
+                <span v-if="searchType === 'area'">エリアから探す</span>
+                <span v-if="searchType === 'gps'">現在地から探す</span>
+              </v-stepper-step>
               <v-divider></v-divider>
               <v-stepper-step step="3">追加アイテムの選択</v-stepper-step>
             </v-stepper-header>
@@ -49,8 +52,8 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <stepper-content-area-search v-if="searchType === 'area'" />
-                <stepper-content-gps-search v-if="searchType === 'gps'" />
+                <stepper-content-area-search v-if="searchType === 'area'" @changeStep="changeStep" @search="search" />
+                <stepper-content-gps-search v-if="searchType === 'gps'" @changeStep="changeStep" @search="search" />
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -162,7 +165,7 @@ export default {
   data () {
     return {
       step: 0,
-      searchType: '',
+      searchType: 'area',
       items7: [
         {
           active: true,
@@ -185,6 +188,12 @@ export default {
   methods: {
     syncAddModal (bool) {
       this.$emit('syncAddModal', bool)
+    },
+    changeStep (num) {
+      this.step = num
+    },
+    search (options) {
+
     }
   }
 }

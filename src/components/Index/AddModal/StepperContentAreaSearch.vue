@@ -1,11 +1,11 @@
 <template>
   <div class="stepper-content-area-search">
-    <v-subheader>
-      <v-icon>place</v-icon>
-      エリアから探す
-    </v-subheader>
     <v-form v-model="valid" ref="form" lazy-validation>
-      <v-container fluid grid-list-xl>
+      <v-container>
+        <v-subheader>
+          <v-icon>place</v-icon>
+          エリアから探す
+        </v-subheader>
         <v-layout wrap align-center>
           <v-flex xs12 d-flex v-if="large_area.length">
             <v-select
