@@ -20,7 +20,10 @@
             <v-stepper-header>
               <v-stepper-step :complete="step > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
               <v-divider></v-divider>
-              <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">エリア選択</v-stepper-step>
+              <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">
+                <span v-if="searchType === 'area'">エリアから探す</span>
+                <span v-if="searchType === 'gps'">現在地から探す</span>
+              </v-stepper-step>
               <v-divider></v-divider>
               <v-stepper-step step="3">追加アイテムの選択</v-stepper-step>
             </v-stepper-header>
@@ -49,7 +52,8 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <stepper-content-area-search v-if="searchType === 'area'" />
+                <stepper-content-area-search v-if="searchType === 'area'" @changeStep="changeStep" @search="search" />
+                <stepper-content-gps-search v-if="searchType === 'gps'" @changeStep="changeStep" @search="search" />
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -149,27 +153,19 @@
 
 <script>
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
+import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
 
 export default {
   name: 'AddModal',
   components: {
-    'stepper-content-area-search': StepperContentAreaSearch
+    'stepper-content-area-search': StepperContentAreaSearch,
+    'stepper-content-gps-search': StepperContentGpsSearch
   },
   props: ['isShown'],
   data () {
     return {
       step: 0,
-      searchType: '',
-      items2: [
-        'Programming',
-        'Design',
-        'Vue',
-        'Vuetify'
-      ],
-      items3: [],
-      items4: [],
-      items5: [],
-      items6: [],
+      searchType: 'area',
       items7: [
         {
           active: true,
@@ -192,6 +188,12 @@ export default {
   methods: {
     syncAddModal (bool) {
       this.$emit('syncAddModal', bool)
+    },
+    changeStep (num) {
+      this.step = num
+    },
+    search (options) {
+
     }
   }
 }
