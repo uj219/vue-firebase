@@ -30,25 +30,40 @@
 
             <v-stepper-items>
               <v-stepper-content step="1">
-                <v-list two-line>
-                  <v-list-tile avatar @click="searchType = 'area'; step = 2">
-                    <v-list-tile-avatar>
-                      <v-icon class="teal white--text">place</v-icon>
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                      <v-list-tile-title>エリアから探す</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
+                <v-container>
+                  <v-subheader>
+                    <v-icon>search</v-icon>
+                    検索方法の選択
+                  </v-subheader>
+                  <v-list two-line>
+                    <v-list-tile avatar @click="selectSearchType('area')">
+                      <v-list-tile-avatar>
+                        <v-icon class="teal white--text">place</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>エリアから探す</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
 
-                  <v-list-tile avatar @click="searchType = 'gps'; step = 2">
-                    <v-list-tile-avatar>
-                      <v-icon class="teal white--text">near_me</v-icon>
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                      <v-list-tile-title>現在地から探す</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-list>
+                    <v-list-tile avatar @click="selectSearchType('gps')">
+                      <v-list-tile-avatar>
+                        <v-icon class="teal white--text">near_me</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>現在地から探す</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+
+                  <v-flex xs12 d-flex>
+                    <v-btn
+                      flat
+                      @click="syncAddModal(false)"
+                    >
+                      Cancel
+                    </v-btn>
+                  </v-flex>
+                </v-container>
               </v-stepper-content>
 
               <v-stepper-content step="2">
@@ -192,8 +207,12 @@ export default {
     changeStep (num) {
       this.step = num
     },
+    selectSearchType (type) {
+      this.searchType = type
+      this.changeStep(2)
+    },
     search (options) {
-
+      
     }
   }
 }
