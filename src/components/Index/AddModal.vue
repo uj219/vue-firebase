@@ -67,8 +67,8 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <stepper-content-area-search v-if="searchType === 'area'" @changeStep="changeStep" @search="search" />
-                <stepper-content-gps-search v-if="searchType === 'gps'" @changeStep="changeStep" @search="search" />
+                <stepper-content-area-search v-if="searchType === 'area'" @changeStep="changeStep" @setSearchOptions="setSearchOptions" />
+                <stepper-content-gps-search v-if="searchType === 'gps'" @changeStep="changeStep" @setSearchOptions="setSearchOptions" />
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -183,8 +183,9 @@ export default {
     return {
       step: 0,
       searchType: 'area',
-      searchOffset: 0,
+      searchOffset: 1,
       searchLimit: 100,
+      searchOptions: {},
       searchResults: [],
       items7: [
         {
@@ -207,6 +208,8 @@ export default {
   },
   methods: {
     syncAddModal (bool) {
+      this.reset()
+      this.step = 0
       this.$emit('syncAddModal', bool)
     },
     changeStep (num) {
@@ -216,13 +219,22 @@ export default {
       this.searchType = type
       this.changeStep(2)
     },
-    search (options) {
+    setSearchOptions (options) {
+      this.reset()
+      this.searchOptions = options
+      this.getItems()
+    },
+    getMoreItems () {
+      this.searchOffset += this.searchLimit
+      this.getItems()
+    },
+    getItems () {
       const params = Object.assign({
         key: hotPepperApiKey,
         format: 'json',
         start: this.searchOffset,
         count: this.searchLimit
-      }, options)
+      }, this.searchOptions)
 
       axios.get(`http://webservice.recruit.co.jp/hotpepper/gourmet/v1/`, {
         params: params
@@ -237,6 +249,11 @@ export default {
         // todo: snackbarで表示
         console.log(error)
       })
+    },
+    reset () {
+      this.searchOptions = {}
+      this.searchOffset = 1
+      this.searchResults = []
     }
   }
 }
