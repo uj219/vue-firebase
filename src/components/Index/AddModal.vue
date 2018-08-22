@@ -30,25 +30,40 @@
 
             <v-stepper-items>
               <v-stepper-content step="1">
-                <v-list two-line>
-                  <v-list-tile avatar @click="searchType = 'area'; step = 2">
-                    <v-list-tile-avatar>
-                      <v-icon class="teal white--text">place</v-icon>
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                      <v-list-tile-title>エリアから探す</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
+                <v-container>
+                  <v-subheader>
+                    <v-icon>search</v-icon>
+                    検索方法の選択
+                  </v-subheader>
+                  <v-list two-line>
+                    <v-list-tile avatar @click="selectSearchType('area')">
+                      <v-list-tile-avatar>
+                        <v-icon class="teal white--text">place</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>エリアから探す</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
 
-                  <v-list-tile avatar @click="searchType = 'gps'; step = 2">
-                    <v-list-tile-avatar>
-                      <v-icon class="teal white--text">near_me</v-icon>
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                      <v-list-tile-title>現在地から探す</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-list>
+                    <v-list-tile avatar @click="selectSearchType('gps')">
+                      <v-list-tile-avatar>
+                        <v-icon class="teal white--text">near_me</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>現在地から探す</v-list-tile-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+
+                  <v-flex xs12 d-flex>
+                    <v-btn
+                      flat
+                      @click="syncAddModal(false)"
+                    >
+                      Cancel
+                    </v-btn>
+                  </v-flex>
+                </v-container>
               </v-stepper-content>
 
               <v-stepper-content step="2">
@@ -152,6 +167,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import hotPepperApiKey from '../../api_keys/hotpepper'
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
 import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
 
@@ -166,6 +183,9 @@ export default {
     return {
       step: 0,
       searchType: 'area',
+      searchOffset: 0,
+      searchLimit: 100,
+      searchResults: [],
       items7: [
         {
           active: true,
@@ -192,8 +212,31 @@ export default {
     changeStep (num) {
       this.step = num
     },
+    selectSearchType (type) {
+      this.searchType = type
+      this.changeStep(2)
+    },
     search (options) {
+      const params = Object.assign({
+        key: hotPepperApiKey,
+        format: 'json',
+        start: this.searchOffset,
+        count: this.searchLimit
+      }, options)
 
+      axios.get(`http://webservice.recruit.co.jp/hotpepper/gourmet/v1/`, {
+        params: params
+      }).then((response) => {
+        response.data.results.shop.forEach((el) => {
+          this.searchResults.push(el)
+        })
+
+        if (this.step === 3) return
+        this.changeStep(3)
+      }).catch((error) => {
+        // todo: snackbarで表示
+        console.log(error)
+      })
     }
   }
 }

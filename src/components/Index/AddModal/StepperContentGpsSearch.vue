@@ -64,7 +64,18 @@
     </v-form>
 
     <div v-else>
-      お使いのブラウザでは位置情報を利用できません。
+      <v-container>
+        <v-subheader>
+          <v-icon>near_me</v-icon>
+          現在地から探す
+        </v-subheader>
+        <v-alert
+          :value="true"
+          type="error"
+        >
+          お使いのブラウザでは位置情報をご利用できません。
+        </v-alert>
+      </v-container>
     </div>
   </div>
 </template>

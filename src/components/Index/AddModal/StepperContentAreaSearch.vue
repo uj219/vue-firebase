@@ -115,7 +115,9 @@ export default {
     },
     search () {
       if (!this.$refs.form.validate()) return
-      this.$emit('search', {small_area: this.small_area_selected})
+      this.$emit('search', {
+        small_area: this.small_area_selected.join(',')
+      })
     },
     changeStep (num) {
       this.$emit('changeStep', num)
