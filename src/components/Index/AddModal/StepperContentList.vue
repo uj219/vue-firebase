@@ -25,7 +25,7 @@
               </v-list-tile-content>
 
               <v-list-tile-action>
-                <v-icon color="teal">add_circle</v-icon>
+                <v-icon color="primary">add_circle</v-icon>
               </v-list-tile-action>
             </v-list-tile>
           </v-list>

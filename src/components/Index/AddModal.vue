@@ -41,7 +41,7 @@
                       @click="selectSearchType('area')"
                     >
                       <v-list-tile-avatar>
-                        <v-icon class="teal white--text">place</v-icon>
+                        <v-icon class="primary white--text">place</v-icon>
                       </v-list-tile-avatar>
                       <v-list-tile-content>
                         <v-list-tile-title>エリアから探す</v-list-tile-title>
@@ -53,7 +53,7 @@
                       @click="selectSearchType('gps')"
                     >
                       <v-list-tile-avatar>
-                        <v-icon class="teal white--text">near_me</v-icon>
+                        <v-icon class="primary white--text">near_me</v-icon>
                       </v-list-tile-avatar>
                       <v-list-tile-content>
                         <v-list-tile-title>現在地から探す</v-list-tile-title>
@@ -136,7 +136,7 @@ export default {
       confirmDialog: false,
       confirmItem: {},
       snackbar: false,
-      color: 'teal',
+      color: 'primary',
       mode: '',
       timeout: 3000,
       text: 'アイテムを追加しました'

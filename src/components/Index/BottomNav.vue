@@ -7,7 +7,7 @@
         fab
         top
         right
-        color="teal"
+        color="primary"
         @click.stop="syncAddModal(true)"
       >
         <v-icon>add</v-icon>
@@ -20,7 +20,7 @@
         color="white"
       >
         <v-btn
-          color="teal"
+          color="primary"
           flat
           value="recent"
           @click="syncHeader('recent')"
@@ -30,7 +30,7 @@
         </v-btn>
 
         <v-btn
-          color="teal"
+          color="primary"
           flat
           value="favorites"
           @click="syncHeader('favorites')"
@@ -40,7 +40,7 @@
         </v-btn>
 
         <v-btn
-          color="teal"
+          color="primary"
           flat
           value="nearby"
           @click="syncHeader('nearby')"
