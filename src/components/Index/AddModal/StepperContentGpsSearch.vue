@@ -93,9 +93,9 @@ export default {
       rangeLabels: [
         '300m',
         '500m',
-        '1000m',
-        '2000m',
-        '3000m'
+        '1km',
+        '2km',
+        '3km'
       ]
     }
   },

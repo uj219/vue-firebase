@@ -11,7 +11,7 @@
         <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
       </v-toolbar>
 
-      <router-view @syncHeader="syncHeader"/>
+      <router-view @syncHeader="syncHeader" @addItem="addItem" />
     </v-app>
   </div>
 </template>
@@ -29,6 +29,9 @@ export default {
     syncHeader (pageTitle) {
       this.pageTitle = pageTitle
       this.hasBackLink = this.$route.meta.backLink
+    },
+    addItem (item) {
+
     }
   }
 }

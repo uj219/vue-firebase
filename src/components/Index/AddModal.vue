@@ -36,7 +36,10 @@
                     検索方法の選択
                   </v-subheader>
                   <v-list two-line>
-                    <v-list-tile avatar @click="selectSearchType('area')">
+                    <v-list-tile
+                      avatar
+                      @click="selectSearchType('area')"
+                    >
                       <v-list-tile-avatar>
                         <v-icon class="teal white--text">place</v-icon>
                       </v-list-tile-avatar>
@@ -45,7 +48,10 @@
                       </v-list-tile-content>
                     </v-list-tile>
 
-                    <v-list-tile avatar @click="selectSearchType('gps')">
+                    <v-list-tile
+                      avatar
+                      @click="selectSearchType('gps')"
+                    >
                       <v-list-tile-avatar>
                         <v-icon class="teal white--text">near_me</v-icon>
                       </v-list-tile-avatar>
@@ -72,7 +78,7 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <stepper-content-list :searchResults="searchResults" :hasMoreResults="hasMoreResults" @changeStep="changeStep" @getMoreItems="getMoreItems"/>
+                <stepper-content-list :searchResults="searchResults" :hasMoreResults="hasMoreResults" @changeStep="changeStep" @getMoreItems="getMoreItems" @confirm="confirm" />
               </v-stepper-content>
             </v-stepper-items>
           </v-stepper>
@@ -80,38 +86,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="confirmDialog"
-      max-width="290"
-    >
-      <v-card>
-        <v-card-title class="headline">このアイテムを追加しますか?</v-card-title>
-
-        <v-card-text>
-          ここにアイテム情報を表示
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="grey lighten-1"
-            flat="flat"
-            @click="confirmDialog = false"
-          >
-            キャンセル
-          </v-btn>
-
-          <v-btn
-            color="teal"
-            flat="flat"
-            @click="snackbar = true"
-          >
-            追加
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <confirm-dialog :confirmDialog="confirmDialog" :confirmItem="confirmItem" @closeConfirm="closeConfirm" @addItem="addItem" />
 
     <v-snackbar
       v-model="snackbar"
@@ -138,13 +113,15 @@ import hotPepperApiKey from '../../api_keys/hotpepper'
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
 import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
 import StepperContentList from '@/components/Index/AddModal/StepperContentList'
+import ConfirmDialog from '@/components/Index/AddModal/ConfirmDialog'
 
 export default {
   name: 'AddModal',
   components: {
     'stepper-content-area-search': StepperContentAreaSearch,
     'stepper-content-gps-search': StepperContentGpsSearch,
-    'stepper-content-list': StepperContentList
+    'stepper-content-list': StepperContentList,
+    'confirm-dialog': ConfirmDialog
   },
   props: ['isShown'],
   data () {
@@ -157,6 +134,7 @@ export default {
       searchResults: [],
       hasMoreResults: true,
       confirmDialog: false,
+      confirmItem: {},
       snackbar: false,
       color: 'teal',
       mode: '',
@@ -214,6 +192,17 @@ export default {
       this.searchOffset = 1
       this.searchResults = []
       this.hasMoreResults = true
+    },
+    confirm (item) {
+      this.confirmItem = item
+      this.confirmDialog = true
+    },
+    closeConfirm () {
+      this.confirmItem = {}
+      this.confirmDialog = false
+    },
+    addItem (item) {
+      this.$emit('addItem', item)
     }
   }
 }
