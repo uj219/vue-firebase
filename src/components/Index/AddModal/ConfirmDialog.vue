@@ -5,32 +5,37 @@
       max-width="290"
     >
       <v-card>
-        <v-card-title class="headline">このアイテムを追加しますか?</v-card-title>
-
-        <v-card-text>
-          <img :src="confirmItem.logo_image">
-
+        <v-card-text class="pb-0">
+          <v-layout row wrap>
+            <v-flex xs12>
+              <img :src="confirmItem.logo_image" class="thumb">
+            </v-flex>
+            <v-flex xs12>
+              <span class="subheading font-weight-bold d-block">{{confirmItem.name}}</span>
+              <span class="d-block">{{confirmItem.catch}}</span>
+            </v-flex>
+          </v-layout>
         </v-card-text>
 
-        <v-card-actions>
-          <v-flex xs12 d-flex>
-            <v-btn
-              color="grey lighten-1"
-              flat="flat"
-              @click="closeConfirm"
-            >
-              キャンセル
-            </v-btn>
+        <v-container>
+          <v-layout row wrap>
+            <v-flex xs12 d-flex>
+              <v-btn
+                flat
+                @click="closeConfirm"
+              >
+                キャンセル
+              </v-btn>
 
-            <v-btn
-              color="teal"
-              flat="flat"
-              @click="addItem(confirmItem)"
-            >
-              追加
-            </v-btn>
-          </v-flex>
-        </v-card-actions>
+              <v-btn
+                color="primary"
+                @click="addItem(confirmItem)"
+              >
+                追加
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-container>
       </v-card>
     </v-dialog>
   </div>
@@ -52,5 +57,8 @@ export default {
 </script>
 
 <style scoped>
-
+.thumb {
+  width: 100%;
+  height: auto;
+}
 </style>
