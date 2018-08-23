@@ -49,18 +49,18 @@
 
           <v-flex xs12 d-flex>
             <v-btn
+              flat
+              @click="changeStep(1)"
+            >
+              Cancel
+            </v-btn>
+
+            <v-btn
               v-if="small_area_selected.length"
               color="primary"
               @click="setSearchOptions"
             >
               Search
-            </v-btn>
-
-            <v-btn
-              flat
-              @click="changeStep(1)"
-            >
-              Cancel
             </v-btn>
           </v-flex>
         </v-layout>

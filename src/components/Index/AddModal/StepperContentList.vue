@@ -3,11 +3,17 @@
     <v-container>
       <v-layout row wrap>
         <v-flex xs12>
-          <v-list>
+          <v-list two-line>
+            <v-subheader>
+              <v-icon>check</v-icon>
+              追加アイテムの選択
+            </v-subheader>
+
             <v-list-tile
+              class="v-list__tile__custom"
               v-for="item in searchResults"
               :key="item.id"
-              @click.stop="confirmDialog = true"
+              @click="confirm(item)"
             >
               <v-list-tile-avatar>
                 <img :src="item.logo_image">
@@ -19,24 +25,11 @@
               </v-list-tile-content>
 
               <v-list-tile-action>
-                <v-icon color="teal">add_circle</v-icon>
+                <v-icon color="primary">add_circle</v-icon>
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
-
-          <v-divider></v-divider>
         </v-flex>
-
-        <v-btn
-          v-if="hasMoreResults"
-          fab
-          dark
-          color="primary"
-          @click="getMoreItems()"
-        >
-          <v-icon dark>expand_more</v-icon><br>
-          More
-        </v-btn>
 
         <v-flex xs12 d-flex>
           <v-btn
@@ -44,6 +37,14 @@
             @click="changeStep(1)"
           >
             Cancel
+          </v-btn>
+
+          <v-btn
+            v-if="hasMoreResults"
+            color="primary"
+            @click="getMoreItems()"
+          >
+            More
           </v-btn>
         </v-flex>
       </v-layout>
@@ -65,6 +66,9 @@ export default {
     },
     changeStep (num) {
       this.$emit('changeStep', num)
+    },
+    confirm (item) {
+      this.$emit('confirm', item)
     }
   }
 }
@@ -74,5 +78,8 @@ export default {
 .v-stepper__content {
   padding-right: 0;
   padding-left: 0;
+}
+.v-list__tile__custom {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.16);
 }
 </style>
