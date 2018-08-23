@@ -7,7 +7,7 @@
             <v-list-tile
               v-for="item in searchResults"
               :key="item.id"
-              @click.stop="confirmDialog = true"
+              @click="confirm(item)"
             >
               <v-list-tile-avatar>
                 <img :src="item.logo_image">
@@ -65,6 +65,9 @@ export default {
     },
     changeStep (num) {
       this.$emit('changeStep', num)
+    },
+    confirm (item) {
+      this.$emit('confirm', item)
     }
   }
 }
