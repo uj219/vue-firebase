@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import * as firebaseFunction from './functions/firebaseFunction'
+
 export default {
   name: 'App',
   data () {
@@ -31,7 +33,12 @@ export default {
       this.hasBackLink = this.$route.meta.backLink
     },
     addItem (item) {
-
+      firebaseFunction.addItemFirestore(item)
+        .then((response) => {
+          console.log(response)
+        }).catch((error) => {
+          console.log(error)
+        })
     }
   }
 }
