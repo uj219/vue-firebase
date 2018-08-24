@@ -87,23 +87,6 @@
     </v-dialog>
 
     <confirm-dialog :confirmDialog="confirmDialog" :confirmItem="confirmItem" @closeConfirm="closeConfirm" @addItem="addItem" />
-
-    <v-snackbar
-      v-model="snackbar"
-      :color="color"
-      :multi-line="mode === 'multi-line'"
-      :timeout="timeout"
-      :vertical="mode === 'vertical'"
-    >
-      {{ text }}
-      <v-btn
-        dark
-        flat
-        @click="snackbar = false"
-      >
-        Close
-      </v-btn>
-    </v-snackbar>
   </div>
 </template>
 
@@ -134,12 +117,7 @@ export default {
       searchResults: [],
       hasMoreResults: true,
       confirmDialog: false,
-      confirmItem: {},
-      snackbar: false,
-      color: 'primary',
-      mode: '',
-      timeout: 3000,
-      text: 'アイテムを追加しました'
+      confirmItem: {}
     }
   },
   methods: {
