@@ -3,9 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import firebase from 'firebase'
-import 'firebase/firestore'
-import firebaseConfig from './api_keys/firebase'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -22,8 +19,6 @@ Vue.use(Vuetify, {
   }
 })
 
-firebase.initializeApp(firebaseConfig)
-// const db = firebase.firestore()
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

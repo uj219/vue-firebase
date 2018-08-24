@@ -51,7 +51,7 @@ export default {
     },
     addItem (item) {
       this.$emit('addItem', item)
-    },
+    }
   }
 }
 </script>
