@@ -9,14 +9,27 @@ const db = firebase.firestore()
 // リストの取得(フィルタ機能あり)
 // -------------------------------------------------------
 export function getListFirestore () {
-
+  return db.collection('restaurants').get()
+    .then((querySnapshot) => {
+      return querySnapshot
+    }).catch((error) => {
+      return {
+        color: 'error',
+        text: error
+      }
+    })
 }
 
 // -------------------------------------------------------
 // アイテムの取得
 // -------------------------------------------------------
-export function getItemFirestore () {
-
+export function getItemFirestore (id) {
+  return db.collection('restaurants').doc(id).get()
+    .then((doc) => {
+      return doc
+    }).catch((error) => {
+      return error
+    })
 }
 
 // -------------------------------------------------------
@@ -40,7 +53,7 @@ export function addItemFirestore (itemObj) {
 
   const docRef = db.collection('restaurants').doc(itemObj.id)
 
-  return docRef.get()
+  return getItemFirestore(itemObj.id)
     .then((doc) => {
       if (doc.exists) {
         return {

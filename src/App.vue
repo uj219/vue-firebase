@@ -11,7 +11,7 @@
         <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
       </v-toolbar>
 
-      <router-view @syncHeader="syncHeader" @addItem="addItem" />
+      <router-view @syncHeader="syncHeader" @addItem="addItem" :list="list"/>
 
       <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
     </v-app>
@@ -31,12 +31,16 @@ export default {
     return {
       pageTitle: '',
       hasBackLink: false,
+      list: [],
       snackbar: {
         isShown: false,
         color: '',
         text: ''
       }
     }
+  },
+  created () {
+    this.getList()
   },
   methods: {
     syncHeader (pageTitle) {
@@ -51,10 +55,29 @@ export default {
     closeSnackbar () {
       this.snackbar.isShown = false
     },
+    getList () {
+      firebaseFunction.getListFirestore()
+        .then((response) => {
+          response.forEach((doc) => {
+            this.list.push({
+              id: doc.id,
+              data: doc.data(),
+              flexXs: 6,
+              flexSm: 3
+            })
+          })
+
+          this.list[0] = Object.assign(this.list[0], {flexXs: 12, flexSm: 12})
+          this.list[1] = Object.assign(this.list[1], {flexXs: 6, flexSm: 6})
+          this.list[2] = Object.assign(this.list[2], {flexXs: 6, flexSm: 6})
+        })
+    },
     addItem (item) {
       firebaseFunction.addItemFirestore(item)
         .then((response) => {
           this.showSnackbar(response)
+          this.list = []
+          this.getList()
         }).catch((error) => {
           this.showSnackbar(error)
         })
