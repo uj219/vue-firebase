@@ -39,21 +39,33 @@ export function addItemFirestore (itemObj) {
   }
 
   const docRef = db.collection('restaurants').doc(itemObj.id)
-  
+
   return docRef.get()
     .then((doc) => {
       if (doc.exists) {
-        return 'すでに登録済みです'
+        return {
+          color: 'warning',
+          text: '既に登録済みです'
+        }
       } else {
         return docRef.set(itemData)
           .then(() => {
-            return '登録しました'
+            return {
+              color: 'success',
+              text: '登録完了しました'
+            }
           }).catch((error) => {
-            return error
+            return {
+              color: 'error',
+              text: error
+            }
           })
       }
     }).catch((error) => {
-      return error
+      return {
+        color: 'error',
+        text: error
+      }
     })
 }
 

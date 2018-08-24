@@ -12,19 +12,30 @@
       </v-toolbar>
 
       <router-view @syncHeader="syncHeader" @addItem="addItem" />
+
+      <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
     </v-app>
   </div>
 </template>
 
 <script>
 import * as firebaseFunction from './functions/firebaseFunction'
+import Snackbar from '@/components/common/Snackbar'
 
 export default {
   name: 'App',
+  components: {
+    'snackbar': Snackbar
+  },
   data () {
     return {
       pageTitle: '',
-      hasBackLink: false
+      hasBackLink: false,
+      snackbar: {
+        isShown: false,
+        color: '',
+        text: ''
+      }
     }
   },
   methods: {
@@ -32,12 +43,20 @@ export default {
       this.pageTitle = pageTitle
       this.hasBackLink = this.$route.meta.backLink
     },
+    showSnackbar (obj) {
+      this.snackbar.isShown = true
+      this.snackbar.color = obj.color
+      this.snackbar.text = obj.text
+    },
+    closeSnackbar () {
+      this.snackbar.isShown = false
+    },
     addItem (item) {
       firebaseFunction.addItemFirestore(item)
         .then((response) => {
-          console.log(response)
+          this.showSnackbar(response)
         }).catch((error) => {
-          console.log(error)
+          this.showSnackbar(error)
         })
     }
   }
