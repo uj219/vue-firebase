@@ -1,15 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <v-toolbar fixed>
-        <v-btn icon v-if="hasBackLink">
-          <router-link to="/">
-            <v-icon>arrow_back</v-icon>
-          </router-link>
-        </v-btn>
-
-        <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
-      </v-toolbar>
+      <toolbar :pageTitle="pageTitle" :hasBackLink="hasBackLink"/>
 
       <router-view @syncHeader="syncHeader" @addItem="addItem" @showSnackbar="showSnackbar" :list="list"/>
 
@@ -20,12 +12,14 @@
 
 <script>
 import * as FirebaseFunction from './functions/FirebaseFunction'
+import Toolbar from '@/components/common/Toolbar'
 import Snackbar from '@/components/common/Snackbar'
 
 export default {
   name: 'App',
   components: {
-    'snackbar': Snackbar
+    'snackbar': Snackbar,
+    'toolbar': Toolbar
   },
   data () {
     return {
