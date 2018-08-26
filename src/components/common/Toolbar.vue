@@ -10,13 +10,24 @@
 
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn
+        <v-menu
           v-if="currentUser"
-          flat
-          @click="logout"
+          offset-y
         >
-          logout
-        </v-btn>
+          <v-avatar
+            slot="activator"
+            :size=30
+          >
+            <img :src="currentUser.photoURL" alt="currentUser.displayName">
+          </v-avatar>
+
+          <v-list>
+            <v-list-tile @click="logout">
+              <v-list-tile-title>ログアウト</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+
         <v-btn
           v-else
           flat
