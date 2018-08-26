@@ -11,7 +11,7 @@
         <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
       </v-toolbar>
 
-      <router-view @syncHeader="syncHeader" @addItem="addItem" :list="list"/>
+      <router-view @syncHeader="syncHeader" @addItem="addItem" @showSnackbar="showSnackbar" :list="list"/>
 
       <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
     </v-app>

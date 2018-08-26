@@ -2,7 +2,7 @@
   <div class="index">
     <list :list="list" />
     <bottom-nav :current="bottomNav" @syncHeader="syncHeader" @syncAddModal="syncAddModal" />
-    <add-modal :isShown="addModal" @syncAddModal="syncAddModal" @addItem="addItem" />
+    <add-modal :isShown="addModal" @syncAddModal="syncAddModal" @addItem="addItem" @showSnackbar="showSnackbar" />
   </div>
 </template>
 
@@ -37,6 +37,9 @@ export default {
     },
     addItem (item) {
       this.$emit('addItem', item)
+    },
+    showSnackbar (params) {
+      this.$emit('showSnackbar', params)
     }
   }
 }
