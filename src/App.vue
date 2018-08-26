@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <v-app>
-      <toolbar :pageTitle="pageTitle" :hasBackLink="hasBackLink"/>
+      <toolbar :pageTitle="pageTitle" :hasBackLink="hasBackLink" :currentUser="currentUser" @login="login" @logout="logout"/>
 
-      <router-view @syncHeader="syncHeader" @addItem="addItem" @showSnackbar="showSnackbar" :list="list"/>
+      <router-view :list="list" :currentUser="currentUser" @syncHeader="syncHeader" @addItem="addItem" @showSnackbar="showSnackbar"/>
 
       <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
     </v-app>
@@ -23,6 +23,7 @@ export default {
   },
   data () {
     return {
+      currentUser: null,
       pageTitle: '',
       hasBackLink: false,
       list: [],
@@ -75,6 +76,41 @@ export default {
         }).catch((error) => {
           this.showSnackbar(error)
         })
+    },
+    login () {
+      FirebaseFunction.login()
+        .then((result) => {
+          // 初回ログインであればユーザーをDBに追加
+          const isNewUser = result.additionalUserInfo.isNewUser
+          if (isNewUser) this.addUser(result.user.uid)
+
+          this.syncCurrentUser()
+          this.showSnackbar({
+            color: 'success',
+            text: 'ログインしました'
+          })
+        }).catch((error) => {
+          this.showSnackbar(error)
+        })
+    },
+    logout () {
+      FirebaseFunction.logout()
+        .then(() => {
+          this.syncCurrentUser()
+          this.$router.push('/')
+          this.showSnackbar({
+            color: 'success',
+            text: 'ログアウトしました'
+          })
+        }).catch((error) => {
+          this.showSnackbar(error)
+        })
+    },
+    syncCurrentUser () {
+      this.currentUser = FirebaseFunction.getCurrentUser()
+    },
+    addUser (userId) {
+      FirebaseFunction.addUserFiresotre(userId)
     }
   }
 }

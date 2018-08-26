@@ -1,9 +1,48 @@
+import * as Util from './Util'
 import firebase from 'firebase'
 import 'firebase/firestore'
 import firebaseConfig from '../api_keys/firebase'
 
 firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore()
+const provider = new firebase.auth.GoogleAuthProvider()
+
+// -------------------------------------------------------
+// ログイン(google)
+// -------------------------------------------------------
+export function login () {
+  return firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+      return result
+    }).catch((error) => {
+      return {
+        color: 'error',
+        text: error
+      }
+    })
+}
+
+// -------------------------------------------------------
+// ログアウト
+// -------------------------------------------------------
+export function logout () {
+  return firebase.auth().signOut()
+}
+
+// -------------------------------------------------------
+// カレントユーザーの取得
+// -------------------------------------------------------
+export function getCurrentUser () {
+  return firebase.auth().currentUser
+}
+
+// -------------------------------------------------------
+// ユーザーの追加
+// -------------------------------------------------------
+export function addUserFiresotre (userId) {
+  const data = Util.getTimeStampCreated(userId)
+  return db.collection('users').doc(userId).set(data)
+}
 
 // -------------------------------------------------------
 // リストの取得(フィルタ機能あり)
@@ -35,8 +74,8 @@ export function getItemFirestore (id) {
 // -------------------------------------------------------
 // アイテムの追加
 // -------------------------------------------------------
-export function addItemFirestore (itemObj) {
-  const itemData = {
+export function addItemFirestore (itemObj, userId) {
+  const itemData = Object.assign({
     name: itemObj.name,
     logo_image: itemObj.logo_image,
     name_kana: itemObj.name_kana,
@@ -49,7 +88,7 @@ export function addItemFirestore (itemObj) {
     food: itemObj.food,
     catch: itemObj.catch,
     photo: itemObj.photo
-  }
+  }, Util.getTimeStampCreated(userId))
 
   const docRef = db.collection('restaurants').doc(itemObj.id)
 
@@ -100,12 +139,5 @@ export function favItemFirestore () {
 // お気に入りから削除
 // -------------------------------------------------------
 export function unFavItemFirestore () {
-
-}
-
-// -------------------------------------------------------
-// ユーザー追加
-// -------------------------------------------------------
-export function addUserFirestore () {
 
 }
