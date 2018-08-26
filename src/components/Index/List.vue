@@ -6,10 +6,10 @@
     >
       <v-layout row wrap>
         <v-flex
-          v-for="item in list"
+          v-for="(item, index) in list"
           v-bind="{
-            [`xs${item.flexXs}`]: true,
-            [`sm${item.flexSm}`]: true
+            [`xs${itemSize[index].flexXs ? itemSize[index].flexXs : 6}`]: true,
+            [`sm${itemSize[index].flexSm ? itemSize[index].flexSm : 3}`]: true
           }"
           :key="item.id"
         >
@@ -56,6 +56,15 @@
 <script>
 export default {
   name: 'List',
-  props: ['list']
+  props: ['list'],
+  data () {
+    return {
+      itemSize: [
+        {flexXs: 12, flexSm: 12},
+        {flexXs: 6, flexSm: 6},
+        {flexXs: 6, flexSm: 6}
+      ]
+    }
+  }
 }
 </script>
