@@ -91,8 +91,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import hotPepperApiKey from '../../api_keys/hotpepper'
+import * as HotpepperFunction from '../../functions/HotpepperFunction'
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
 import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
 import StepperContentList from '@/components/Index/AddModal/StepperContentList'
@@ -144,25 +143,21 @@ export default {
     },
     getItems () {
       const params = Object.assign({
-        key: hotPepperApiKey,
-        format: 'json',
         start: this.searchOffset,
         count: this.searchLimit
       }, this.searchOptions)
 
-      axios.get(`http://webservice.recruit.co.jp/hotpepper/gourmet/v1/`, {
-        params: params
-      }).then((response) => {
-        if (response.data.results.results_returned < this.searchLimit) this.hasMoreResults = false
-        response.data.results.shop.forEach((el) => {
+      HotpepperFunction.getListHotpepper(params).then((response) => {
+        if (response.results_returned < this.searchLimit) this.hasMoreResults = false
+        response.shop.forEach((el) => {
           this.searchResults.push(el)
         })
 
         if (this.step === 3) return
         this.changeStep(3)
       }).catch((error) => {
-        // todo: snackbarで表示
-        console.log(error)
+        // todo: errorが正しく渡せていない
+        this.$emit('showSnackbar', error)
       })
     },
     reset () {

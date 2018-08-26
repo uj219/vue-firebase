@@ -16,7 +16,7 @@
           <v-card>
             <router-link :to="`/item/${item.id}`">
               <v-card-media
-                :src="item.src"
+                :src="item.data.photo.pc.l"
                 height="200px"
               >
                 <v-container
@@ -26,7 +26,7 @@
                 >
                   <v-layout fill-height>
                     <v-flex xs12 align-end flexbox>
-                      <span class="headline white--text" v-text="item.title"></span>
+                      <span class="headline white--text" v-text="item.data.name"></span>
                     </v-flex>
                   </v-layout>
                 </v-container>

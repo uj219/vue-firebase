@@ -3,6 +3,7 @@
     <v-dialog
       v-model="confirmDialog"
       max-width="290"
+      persistent
     >
       <v-card>
         <v-card-text class="pb-0">
@@ -51,6 +52,7 @@ export default {
     },
     addItem (item) {
       this.$emit('addItem', item)
+      this.$emit('closeConfirm')
     }
   }
 }
