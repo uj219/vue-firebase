@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import * as firebaseFunction from './functions/firebaseFunction'
+import * as FirebaseFunction from './functions/FirebaseFunction'
 import Snackbar from '@/components/common/Snackbar'
 
 export default {
@@ -56,7 +56,7 @@ export default {
       this.snackbar.isShown = false
     },
     getList () {
-      firebaseFunction.getListFirestore()
+      FirebaseFunction.getListFirestore()
         .then((response) => {
           response.forEach((doc) => {
             this.list.push({
@@ -73,7 +73,7 @@ export default {
         })
     },
     addItem (item) {
-      firebaseFunction.addItemFirestore(item)
+      FirebaseFunction.addItemFirestore(item)
         .then((response) => {
           this.showSnackbar(response)
           this.list = []
