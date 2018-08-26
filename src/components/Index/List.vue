@@ -12,8 +12,8 @@
         <v-flex
           v-for="(item, index) in list"
           v-bind="{
-            [`xs${itemSize[index].flexXs ? itemSize[index].flexXs : 6}`]: true,
-            [`sm${itemSize[index].flexSm ? itemSize[index].flexSm : 3}`]: true
+            [`xs${itemSize[index] ? itemSize[index].flexXs : 6}`]: true,
+            [`sm${itemSize[index] ? itemSize[index].flexSm : 3}`]: true
           }"
           :key="item.id"
         >
