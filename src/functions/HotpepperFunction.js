@@ -24,19 +24,19 @@ export function getListHotpepper (options) {
 // -------------------------------------------------------
 // エリアの取得
 // -------------------------------------------------------
-// export function getAreaHotpepper (area, options) {
-//   const params = Object.assign({
-//     key: hotPepperApiKey,
-//     format: 'json'
-//   }, options)
-//
-//   return axios.get(`http://webservice.recruit.co.jp/hotpepper/${area}/v1/`, {params: params})
-//     .then((response) => {
-//       return response.data.results[area]
-//     }).catch((error) => {
-//       return {
-//         color: 'error',
-//         text: error
-//       }
-//     })
-// }
+export function getAreaHotpepper (area, options) {
+  const params = Object.assign({
+    key: hotPepperApiKey,
+    format: 'json'
+  }, options)
+
+  return axios.get(`http://webservice.recruit.co.jp/hotpepper/${area}/v1/`, {params: params})
+    .then((response) => {
+      return response.data.results[area]
+    }).catch((error) => {
+      return {
+        color: 'error',
+        text: error
+      }
+    })
+}
