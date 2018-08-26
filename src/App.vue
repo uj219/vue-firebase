@@ -53,22 +53,22 @@ export default {
     getList () {
       FirebaseFunction.getListFirestore()
         .then((response) => {
+          // 空であれば何もしない
+          if (response.empty) {
+            this.list = []
+            return
+          }
+
           response.forEach((doc) => {
             this.list.push({
               id: doc.id,
-              data: doc.data(),
-              flexXs: 6,
-              flexSm: 3
+              data: doc.data()
             })
           })
-
-          this.list[0] = Object.assign(this.list[0], {flexXs: 12, flexSm: 12})
-          this.list[1] = Object.assign(this.list[1], {flexXs: 6, flexSm: 6})
-          this.list[2] = Object.assign(this.list[2], {flexXs: 6, flexSm: 6})
         })
     },
     addItem (item) {
-      FirebaseFunction.addItemFirestore(item)
+      FirebaseFunction.addItemFirestore(item, this.currentUser.uid)
         .then((response) => {
           this.showSnackbar(response)
           this.list = []

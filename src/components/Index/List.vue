@@ -4,12 +4,16 @@
       fluid
       grid-list-md
     >
-      <v-layout row wrap>
+      <v-layout
+        v-if="list.length > 0"
+        row
+        wrap
+      >
         <v-flex
-          v-for="item in list"
+          v-for="(item, index) in list"
           v-bind="{
-            [`xs${item.flexXs}`]: true,
-            [`sm${item.flexSm}`]: true
+            [`xs${itemSize[index].flexXs ? itemSize[index].flexXs : 6}`]: true,
+            [`sm${itemSize[index].flexSm ? itemSize[index].flexSm : 3}`]: true
           }"
           :key="item.id"
         >
@@ -49,13 +53,33 @@
           </v-card>
         </v-flex>
       </v-layout>
+
+      <v-layout
+        v-else
+      >
+        <no-item text="表示できるアイテムがありません" height="400px"/>
+      </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
+import NoItem from '@/components/common/NoItem'
+
 export default {
   name: 'List',
-  props: ['list']
+  props: ['list'],
+  components: {
+    'no-item': NoItem
+  },
+  data () {
+    return {
+      itemSize: [
+        {flexXs: 12, flexSm: 12},
+        {flexXs: 6, flexSm: 6},
+        {flexXs: 6, flexSm: 6}
+      ]
+    }
+  }
 }
 </script>
