@@ -6,6 +6,8 @@
       <router-view :list="list" :currentUser="currentUser" @syncHeader="syncHeader" @addItem="addItem" @showSnackbar="showSnackbar"/>
 
       <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
+
+      <login-dialog :loginDialog="loginDialog" @login="login" @syncLoginDialog="syncLoginDialog"/>
     </v-app>
   </div>
 </template>
@@ -14,12 +16,14 @@
 import * as FirebaseFunction from './functions/FirebaseFunction'
 import Toolbar from '@/components/common/Toolbar'
 import Snackbar from '@/components/common/Snackbar'
+import LoginDialog from '@/components/common/LoginDialog'
 
 export default {
   name: 'App',
   components: {
     'snackbar': Snackbar,
-    'toolbar': Toolbar
+    'toolbar': Toolbar,
+    'login-dialog': LoginDialog
   },
   data () {
     return {
@@ -31,7 +35,8 @@ export default {
         isShown: false,
         color: '',
         text: ''
-      }
+      },
+      loginDialog: false
     }
   },
   created () {
@@ -49,6 +54,9 @@ export default {
     },
     closeSnackbar () {
       this.snackbar.isShown = false
+    },
+    syncLoginDialog (bool) {
+      this.loginDialog = bool
     },
     getList () {
       FirebaseFunction.getListFirestore()
@@ -68,6 +76,10 @@ export default {
         })
     },
     addItem (item) {
+      if (!this.currentUser) {
+        this.syncLoginDialog(true)
+        return
+      }
       FirebaseFunction.addItemFirestore(item, this.currentUser.uid)
         .then((response) => {
           this.showSnackbar(response)
