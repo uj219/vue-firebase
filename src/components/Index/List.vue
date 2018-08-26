@@ -4,7 +4,11 @@
       fluid
       grid-list-md
     >
-      <v-layout row wrap>
+      <v-layout
+        v-if="list.length > 0"
+        row
+        wrap
+      >
         <v-flex
           v-for="(item, index) in list"
           v-bind="{
@@ -49,14 +53,25 @@
           </v-card>
         </v-flex>
       </v-layout>
+
+      <v-layout
+        v-else
+      >
+        <no-item text="表示できるアイテムがありません" height="400px"/>
+      </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
+import NoItem from '@/components/common/NoItem'
+
 export default {
   name: 'List',
   props: ['list'],
+  components: {
+    'no-item': NoItem
+  },
   data () {
     return {
       itemSize: [

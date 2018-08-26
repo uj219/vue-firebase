@@ -54,7 +54,10 @@ export default {
       FirebaseFunction.getListFirestore()
         .then((response) => {
           // 空であれば何もしない
-          if (response.empty) return
+          if (response.empty) {
+            this.list = []
+            return
+          }
 
           response.forEach((doc) => {
             this.list.push({
