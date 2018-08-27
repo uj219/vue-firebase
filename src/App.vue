@@ -128,6 +128,20 @@ export default {
     },
     syncCurrentUser () {
       this.currentUser = FirebaseFunction.getCurrentUser()
+
+      // ログイン時にお気に入りをいっしょに格納
+      if (this.currentUser !== null) {
+        FirebaseFunction.getUserFirestore(this.currentUser.uid)
+          .then((doc) => {
+            if (typeof doc.data().fav === 'undefined') return
+            this.currentUser.fav = doc.data().fav
+          }).catch((error) => {
+            this.showSnackbar({
+              color: 'error',
+              text: error
+            })
+          })
+      }
     },
     addUser (userId) {
       FirebaseFunction.addUserFiresotre(userId)

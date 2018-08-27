@@ -45,6 +45,18 @@ export function addUserFiresotre (userId) {
 }
 
 // -------------------------------------------------------
+// ユーザー取得(firestoreの方から)
+// -------------------------------------------------------
+export function getUserFirestore (userId) {
+  return db.collection('users').doc(userId).get()
+    .then((doc) => {
+      return doc
+    }).catch((error) => {
+      return error
+    })
+}
+
+// -------------------------------------------------------
 // リストの取得(フィルタ機能あり)
 // -------------------------------------------------------
 export function getListFirestore () {
