@@ -142,6 +142,11 @@ export default {
             color: 'success',
             text: text
           })
+        }).catch((error) => {
+          this.showSnackbar({
+            color: 'error',
+            text: error
+          })
         })
     }
   }

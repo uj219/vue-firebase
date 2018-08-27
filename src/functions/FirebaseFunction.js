@@ -122,26 +122,34 @@ export function addItemFirestore (itemObj, userId) {
 }
 
 // -------------------------------------------------------
-// アイテムの削除
-// -------------------------------------------------------
-export function deleteItemFirestore () {
-
-}
-
-// -------------------------------------------------------
 // お気に入りに追加
 // -------------------------------------------------------
+// 複数のドキュメントから取得・更新するのでトランザクションを使用
 export function toggleFavFirestore (bool, itemId, userId) {
-  // 一括書き込み
-  const batch = db.batch()
-
   // アイテム側
-  const itemRef = db.collection('restaurants').doc(itemId).collection('userFav').doc(userId)
-  batch.set(itemRef, Util.getTimeStampCreated(userId))
+  const itemRef = db.collection('restaurants').doc(itemId)
+  let itemData = {}
+  itemData[userId] = bool
 
   // ユーザー側
-  const userRef = db.collection('users').doc(userId).collection('fav').doc(itemId)
-  batch.set(userRef, Util.getTimeStampCreated(userId))
+  const userRef = db.collection('users').doc(userId)
+  let userData = {}
+  userData[itemId] = bool
 
-  return batch.commit()
+  return db.runTransaction(async (transaction) => {
+    const [itemDoc, userDoc] = await Promise.all([
+      transaction.get(itemRef),
+      transaction.get(userRef)
+    ])
+
+    if (typeof itemDoc.data().userFav !== 'undefined') {
+      itemData = Object.assign(itemDoc.data().userFav, itemData)
+    }
+    transaction.update(itemRef, {userFav: itemData})
+
+    if (typeof userDoc.data().fav !== 'undefined') {
+      userData = Object.assign(userDoc.data().fav, userData)
+    }
+    transaction.update(userRef, {fav: userData})
+  })
 }
