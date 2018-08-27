@@ -67,13 +67,13 @@ export default {
       this.loginDialog = bool
     },
     getList () {
+      // 重複しないよう毎回初期化
+      this.list = []
+
       FirebaseFunction.getListFirestore()
         .then((response) => {
           // 空であれば何もしない
-          if (response.empty) {
-            this.list = []
-            return
-          }
+          if (response.empty) return
 
           response.forEach((doc) => {
             this.list.push({
@@ -105,6 +105,7 @@ export default {
           if (isNewUser) this.addUser(result.user.uid)
 
           this.syncCurrentUser()
+          this.getList()
           this.showSnackbar({
             color: 'success',
             text: 'ログインしました'

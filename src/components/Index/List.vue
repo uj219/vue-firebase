@@ -39,20 +39,7 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                v-if="currentUser"
-                icon
-                @click="toggleFav(true, item.id, currentUser.uid)"
-              >
-                <v-icon>favorite</v-icon>
-              </v-btn>
-              <v-btn
-                v-else
-                icon
-                @click="syncLoginDialog(true)"
-              >
-                <v-icon>favorite</v-icon>
-              </v-btn>
+              <btn-favorite :currentUser="currentUser" :item="item" @toggleFav="toggleFav" @syncLoginDialog="syncLoginDialog"/>
             </v-card-actions>
 
           </v-card>
@@ -70,12 +57,14 @@
 
 <script>
 import NoItem from '@/components/common/NoItem'
+import BtnFavorite from '@/components/common/BtnFavorite'
 
 export default {
   name: 'List',
   props: ['list', 'currentUser'],
   components: {
-    'no-item': NoItem
+    'no-item': NoItem,
+    'btn-favorite': BtnFavorite
   },
   data () {
     return {
