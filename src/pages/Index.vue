@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <list :list="list" />
+    <list :list="list" :currentUser="currentUser" @toggleFav="toggleFav" @syncLoginDialog="syncLoginDialog"/>
     <bottom-nav :current="bottomNav" @syncHeader="syncHeader" @syncAddModal="syncAddModal" />
     <add-modal :isShown="addModal" @syncAddModal="syncAddModal" @addItem="addItem" @showSnackbar="showSnackbar" />
   </div>
@@ -18,7 +18,7 @@ export default {
     'bottom-nav': BottomNav,
     'add-modal': AddModal
   },
-  props: ['list'],
+  props: ['list', 'currentUser'],
   data () {
     return {
       bottomNav: 'recent',
@@ -35,11 +35,17 @@ export default {
     syncAddModal (bool) {
       this.addModal = bool
     },
+    syncLoginDialog (bool) {
+      this.$emit('syncLoginDialog', bool)
+    },
     addItem (item) {
       this.$emit('addItem', item)
     },
     showSnackbar (params) {
       this.$emit('showSnackbar', params)
+    },
+    toggleFav (bool, itemId, userId) {
+      this.$emit('toggleFav', bool, itemId, userId)
     }
   }
 }

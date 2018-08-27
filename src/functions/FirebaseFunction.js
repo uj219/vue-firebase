@@ -45,6 +45,18 @@ export function addUserFiresotre (userId) {
 }
 
 // -------------------------------------------------------
+// ユーザー取得(firestoreの方から)
+// -------------------------------------------------------
+export function getUserFirestore (userId) {
+  return db.collection('users').doc(userId).get()
+    .then((doc) => {
+      return doc
+    }).catch((error) => {
+      return error
+    })
+}
+
+// -------------------------------------------------------
 // リストの取得(フィルタ機能あり)
 // -------------------------------------------------------
 export function getListFirestore () {
@@ -122,22 +134,34 @@ export function addItemFirestore (itemObj, userId) {
 }
 
 // -------------------------------------------------------
-// アイテムの削除
-// -------------------------------------------------------
-export function deleteItemFirestore () {
-
-}
-
-// -------------------------------------------------------
 // お気に入りに追加
 // -------------------------------------------------------
-export function favItemFirestore () {
+// 複数のドキュメントから取得・更新するのでトランザクションを使用
+export function toggleFavFirestore (bool, itemId, userId) {
+  // アイテム側
+  const itemRef = db.collection('restaurants').doc(itemId)
+  let itemData = {}
+  itemData[userId] = bool
 
-}
+  // ユーザー側
+  const userRef = db.collection('users').doc(userId)
+  let userData = {}
+  userData[itemId] = bool
 
-// -------------------------------------------------------
-// お気に入りから削除
-// -------------------------------------------------------
-export function unFavItemFirestore () {
+  return db.runTransaction(async (transaction) => {
+    const [itemDoc, userDoc] = await Promise.all([
+      transaction.get(itemRef),
+      transaction.get(userRef)
+    ])
 
+    if (typeof itemDoc.data().userFav !== 'undefined') {
+      itemData = Object.assign(itemDoc.data().userFav, itemData)
+    }
+    transaction.update(itemRef, {userFav: itemData})
+
+    if (typeof userDoc.data().fav !== 'undefined') {
+      userData = Object.assign(userDoc.data().fav, userData)
+    }
+    transaction.update(userRef, {fav: userData})
+  })
 }

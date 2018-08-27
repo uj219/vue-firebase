@@ -3,7 +3,15 @@
     <v-app>
       <toolbar :pageTitle="pageTitle" :hasBackLink="hasBackLink" :currentUser="currentUser" @login="login" @logout="logout"/>
 
-      <router-view :list="list" :currentUser="currentUser" @syncHeader="syncHeader" @addItem="addItem" @showSnackbar="showSnackbar"/>
+      <router-view
+        :list="list"
+        :currentUser="currentUser"
+        @syncHeader="syncHeader"
+        @addItem="addItem"
+        @showSnackbar="showSnackbar"
+        @toggleFav="toggleFav"
+        @syncLoginDialog="syncLoginDialog"
+      />
 
       <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
 
@@ -59,13 +67,13 @@ export default {
       this.loginDialog = bool
     },
     getList () {
+      // 重複しないよう毎回初期化
+      this.list = []
+
       FirebaseFunction.getListFirestore()
         .then((response) => {
           // 空であれば何もしない
-          if (response.empty) {
-            this.list = []
-            return
-          }
+          if (response.empty) return
 
           response.forEach((doc) => {
             this.list.push({
@@ -97,6 +105,7 @@ export default {
           if (isNewUser) this.addUser(result.user.uid)
 
           this.syncCurrentUser()
+          this.getList()
           this.showSnackbar({
             color: 'success',
             text: 'ログインしました'
@@ -120,9 +129,40 @@ export default {
     },
     syncCurrentUser () {
       this.currentUser = FirebaseFunction.getCurrentUser()
+
+      // ログイン時にお気に入りをいっしょに格納
+      if (this.currentUser !== null) {
+        FirebaseFunction.getUserFirestore(this.currentUser.uid)
+          .then((doc) => {
+            if (typeof doc.data().fav === 'undefined') return
+            this.currentUser.fav = doc.data().fav
+          }).catch((error) => {
+            this.showSnackbar({
+              color: 'error',
+              text: error
+            })
+          })
+      }
     },
     addUser (userId) {
       FirebaseFunction.addUserFiresotre(userId)
+    },
+    toggleFav (bool, itemId, userId) {
+      let text = 'お気に入りから削除しました'
+      if (bool) text = 'お気に入りに追加しました'
+
+      FirebaseFunction.toggleFavFirestore(bool, itemId, userId)
+        .then(() => {
+          this.showSnackbar({
+            color: 'success',
+            text: text
+          })
+        }).catch((error) => {
+          this.showSnackbar({
+            color: 'error',
+            text: error
+          })
+        })
     }
   }
 }
