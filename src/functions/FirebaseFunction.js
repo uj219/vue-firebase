@@ -131,13 +131,17 @@ export function deleteItemFirestore () {
 // -------------------------------------------------------
 // お気に入りに追加
 // -------------------------------------------------------
-export function favItemFirestore () {
+export function toggleFavFirestore (bool, itemId, userId) {
+  // 一括書き込み
+  const batch = db.batch()
 
-}
+  // アイテム側
+  const itemRef = db.collection('restaurants').doc(itemId).collection('userFav').doc(userId)
+  batch.set(itemRef, Util.getTimeStampCreated(userId))
 
-// -------------------------------------------------------
-// お気に入りから削除
-// -------------------------------------------------------
-export function unFavItemFirestore () {
+  // ユーザー側
+  const userRef = db.collection('users').doc(userId).collection('fav').doc(itemId)
+  batch.set(userRef, Util.getTimeStampCreated(userId))
 
+  return batch.commit()
 }

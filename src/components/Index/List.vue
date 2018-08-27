@@ -39,14 +39,19 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn icon>
+              <v-btn
+                v-if="currentUser"
+                icon
+                @click="toggleFav(true, item.id, currentUser.uid)"
+              >
                 <v-icon>favorite</v-icon>
               </v-btn>
-              <v-btn icon>
-                <v-icon>bookmark</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>share</v-icon>
+              <v-btn
+                v-else
+                icon
+                @click="syncLoginDialog(true)"
+              >
+                <v-icon>favorite</v-icon>
               </v-btn>
             </v-card-actions>
 
@@ -68,7 +73,7 @@ import NoItem from '@/components/common/NoItem'
 
 export default {
   name: 'List',
-  props: ['list'],
+  props: ['list', 'currentUser'],
   components: {
     'no-item': NoItem
   },
@@ -79,6 +84,14 @@ export default {
         {flexXs: 6, flexSm: 6},
         {flexXs: 6, flexSm: 6}
       ]
+    }
+  },
+  methods: {
+    toggleFav (bool, itemId, userId) {
+      this.$emit('toggleFav', bool, itemId, userId)
+    },
+    syncLoginDialog (bool) {
+      this.$emit('syncLoginDialog', bool)
     }
   }
 }

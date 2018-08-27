@@ -3,7 +3,15 @@
     <v-app>
       <toolbar :pageTitle="pageTitle" :hasBackLink="hasBackLink" :currentUser="currentUser" @login="login" @logout="logout"/>
 
-      <router-view :list="list" :currentUser="currentUser" @syncHeader="syncHeader" @addItem="addItem" @showSnackbar="showSnackbar"/>
+      <router-view
+        :list="list"
+        :currentUser="currentUser"
+        @syncHeader="syncHeader"
+        @addItem="addItem"
+        @showSnackbar="showSnackbar"
+        @toggleFav="toggleFav"
+        @syncLoginDialog="syncLoginDialog"
+      />
 
       <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
 
@@ -123,6 +131,18 @@ export default {
     },
     addUser (userId) {
       FirebaseFunction.addUserFiresotre(userId)
+    },
+    toggleFav (bool, itemId, userId) {
+      let text = 'お気に入りから削除しました'
+      if (bool) text = 'お気に入りに追加しました'
+
+      FirebaseFunction.toggleFavFirestore(bool, itemId, userId)
+        .then(() => {
+          this.showSnackbar({
+            color: 'success',
+            text: text
+          })
+        })
     }
   }
 }
