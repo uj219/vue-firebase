@@ -45,12 +45,12 @@ export function addUserFiresotre (userId) {
 }
 
 // -------------------------------------------------------
-// ユーザー取得(firestoreの方から)
+// ユーザーのお気に入り取得
 // -------------------------------------------------------
-export function getUserFirestore (userId) {
-  return db.collection('users').doc(userId).get()
-    .then((doc) => {
-      return doc
+export function getUserFavFirestore (userId) {
+  return db.collection('users').doc(userId).collection('fav').get()
+    .then((querySnapshot) => {
+      return querySnapshot
     }).catch((error) => {
       return error
     })
