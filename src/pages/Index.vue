@@ -1,8 +1,26 @@
 <template>
   <div class="index">
-    <list :list="list" :currentUser="currentUser" @addFav="addFav" @deleteFav="deleteFav" @syncLoginDialog="syncLoginDialog"/>
-    <bottom-nav :current="bottomNav" @syncHeader="syncHeader" @syncAddModal="syncAddModal" />
-    <add-modal :isShown="addModal" @syncAddModal="syncAddModal" @addItem="addItem" @showSnackbar="showSnackbar" />
+    <list
+      :list="list"
+      :listLoading="listLoading"
+      :currentUser="currentUser"
+      @addFav="addFav"
+      @deleteFav="deleteFav"
+      @syncLoginDialog="syncLoginDialog"
+    />
+
+    <bottom-nav
+      :current="bottomNav"
+      @syncHeader="syncHeader"
+      @syncAddModal="syncAddModal"
+    />
+
+    <add-modal
+      :isShown="addModal"
+      @syncAddModal="syncAddModal"
+      @addItem="addItem"
+      @showSnackbar="showSnackbar"
+    />
   </div>
 </template>
 
@@ -18,7 +36,7 @@ export default {
     'bottom-nav': BottomNav,
     'add-modal': AddModal
   },
-  props: ['list', 'currentUser'],
+  props: ['list', 'listLoading', 'currentUser'],
   data () {
     return {
       bottomNav: 'recent',

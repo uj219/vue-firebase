@@ -1,10 +1,17 @@
 <template>
   <div id="app">
     <v-app>
-      <toolbar :pageTitle="pageTitle" :hasBackLink="hasBackLink" :currentUser="currentUser" @login="login" @logout="logout"/>
+      <toolbar
+        :pageTitle="pageTitle"
+        :hasBackLink="hasBackLink"
+        :currentUser="currentUser"
+        @login="login"
+        @logout="logout"
+      />
 
       <router-view
         :list="list"
+        :listLoading="listLoading"
         :currentUser="currentUser"
         @syncHeader="syncHeader"
         @addItem="addItem"
@@ -14,9 +21,16 @@
         @syncLoginDialog="syncLoginDialog"
       />
 
-      <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
+      <snackbar
+        :snackbar="snackbar"
+        @closeSnackbar="closeSnackbar"
+      />
 
-      <login-dialog :loginDialog="loginDialog" @login="login" @syncLoginDialog="syncLoginDialog"/>
+      <login-dialog
+        :loginDialog="loginDialog"
+        @login="login"
+        @syncLoginDialog="syncLoginDialog"
+      />
     </v-app>
   </div>
 </template>
@@ -40,6 +54,7 @@ export default {
       pageTitle: '',
       hasBackLink: false,
       list: [],
+      listLoading: true,
       snackbar: {
         isShown: false,
         color: '',
@@ -70,6 +85,7 @@ export default {
     getList () {
       // 重複しないよう毎回初期化
       this.list = []
+      this.listLoading = true
 
       FirebaseFunction.getListFirestore()
         .then((querySnapshotList) => {
@@ -90,6 +106,8 @@ export default {
                   data: docList.data(),
                   userFav: userFav
                 })
+
+                this.listLoading = false
               })
           })
         })
