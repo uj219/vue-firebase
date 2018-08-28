@@ -9,7 +9,8 @@
         @syncHeader="syncHeader"
         @addItem="addItem"
         @showSnackbar="showSnackbar"
-        @toggleFav="toggleFav"
+        @addFav="addFav"
+        @deleteFav="deleteFav"
         @syncLoginDialog="syncLoginDialog"
       />
 
@@ -71,15 +72,25 @@ export default {
       this.list = []
 
       FirebaseFunction.getListFirestore()
-        .then((response) => {
+        .then((querySnapshotList) => {
           // 空であれば何もしない
-          if (response.empty) return
+          if (querySnapshotList.empty) return
 
-          response.forEach((doc) => {
-            this.list.push({
-              id: doc.id,
-              data: doc.data()
-            })
+          querySnapshotList.forEach((docList) => {
+            const userFav = []
+
+            FirebaseFunction.getItemUserFavFirestore(docList.id)
+              .then((querySnapshotUserFav) => {
+                querySnapshotUserFav.forEach((docUserFav) => {
+                  userFav.push(docUserFav.id)
+                })
+
+                this.list.push({
+                  id: docList.id,
+                  data: docList.data(),
+                  userFav: userFav
+                })
+              })
           })
         })
     },
@@ -91,7 +102,6 @@ export default {
       FirebaseFunction.addItemFirestore(item, this.currentUser.uid)
         .then((response) => {
           this.showSnackbar(response)
-          this.list = []
           this.getList()
         }).catch((error) => {
           this.showSnackbar(error)
@@ -147,15 +157,36 @@ export default {
     addUser (userId) {
       FirebaseFunction.addUserFiresotre(userId)
     },
-    toggleFav (bool, itemId, userId) {
-      let text = 'お気に入りから削除しました'
-      if (bool) text = 'お気に入りに追加しました'
-
-      FirebaseFunction.toggleFavFirestore(bool, itemId, userId)
+    addFav (itemId, userId) {
+      FirebaseFunction.addFavFirestore(itemId, userId)
         .then(() => {
+          this.list.forEach((el) => {
+            if (el.id === itemId) el.userFav.push(userId)
+          })
           this.showSnackbar({
             color: 'success',
-            text: text
+            text: 'お気に入りに追加しました'
+          })
+        }).catch((error) => {
+          this.showSnackbar({
+            color: 'error',
+            text: error
+          })
+        })
+    },
+    deleteFav (itemId, userId) {
+      FirebaseFunction.deleteFavFirestore(itemId, userId)
+        .then(() => {
+          this.list.forEach((el) => {
+            if (el.id === itemId) {
+              el.userFav = el.userFav.map((id) => {
+                if (id !== userId) return id
+              })
+            }
+          })
+          this.showSnackbar({
+            color: 'success',
+            text: 'お気に入りから削除しました'
           })
         }).catch((error) => {
           this.showSnackbar({

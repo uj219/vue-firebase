@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <list :list="list" :currentUser="currentUser" @toggleFav="toggleFav" @syncLoginDialog="syncLoginDialog"/>
+    <list :list="list" :currentUser="currentUser" @addFav="addFav" @deleteFav="deleteFav" @syncLoginDialog="syncLoginDialog"/>
     <bottom-nav :current="bottomNav" @syncHeader="syncHeader" @syncAddModal="syncAddModal" />
     <add-modal :isShown="addModal" @syncAddModal="syncAddModal" @addItem="addItem" @showSnackbar="showSnackbar" />
   </div>
@@ -44,8 +44,11 @@ export default {
     showSnackbar (params) {
       this.$emit('showSnackbar', params)
     },
-    toggleFav (bool, itemId, userId) {
-      this.$emit('toggleFav', bool, itemId, userId)
+    addFav (itemId, userId) {
+      this.$emit('addFav', itemId, userId)
+    },
+    deleteFav (itemId, userId) {
+      this.$emit('deleteFav', itemId, userId)
     }
   }
 }

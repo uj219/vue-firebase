@@ -39,7 +39,7 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <btn-favorite :currentUser="currentUser" :item="item" @toggleFav="toggleFav" @syncLoginDialog="syncLoginDialog"/>
+              <btn-favorite :currentUser="currentUser" :item="item" @addFav="addFav" @deleteFav="deleteFav" @syncLoginDialog="syncLoginDialog"/>
             </v-card-actions>
 
           </v-card>
@@ -76,8 +76,11 @@ export default {
     }
   },
   methods: {
-    toggleFav (bool, itemId, userId) {
-      this.$emit('toggleFav', bool, itemId, userId)
+    addFav (itemId, userId) {
+      this.$emit('addFav', itemId, userId)
+    },
+    deleteFav (itemId, userId) {
+      this.$emit('deleteFav', itemId, userId)
     },
     syncLoginDialog (bool) {
       this.$emit('syncLoginDialog', bool)
