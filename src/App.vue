@@ -198,9 +198,7 @@ export default {
         .then(() => {
           this.list.forEach((el) => {
             if (el.id === itemId) {
-              el.userFav = el.userFav.map((id) => {
-                if (id !== userId) return id
-              })
+              el.userFav = el.userFav.filter(id => id !== userId)
             }
           })
           this.showSnackbar({
