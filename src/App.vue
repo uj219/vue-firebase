@@ -141,10 +141,12 @@ export default {
 
       // ログイン時にお気に入りをいっしょに格納
       if (this.currentUser !== null) {
-        FirebaseFunction.getUserFirestore(this.currentUser.uid)
-          .then((doc) => {
-            if (typeof doc.data().fav === 'undefined') return
-            this.currentUser.fav = doc.data().fav
+        this.currentUser.fav = []
+        FirebaseFunction.getUserFavFirestore(this.currentUser.uid)
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              this.currentUser.fav.push(doc.id)
+            })
           }).catch((error) => {
             this.showSnackbar({
               color: 'error',
