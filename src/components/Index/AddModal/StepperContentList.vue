@@ -13,7 +13,7 @@
               class="v-list__tile__custom"
               v-for="item in searchResults"
               :key="item.id"
-              @click="confirm(item)"
+              @click="confirm(item, item.isExist)"
             >
               <v-list-tile-avatar>
                 <img :src="item.logo_image">
@@ -24,8 +24,8 @@
                 <v-list-tile-sub-title v-html="item.catch"></v-list-tile-sub-title>
               </v-list-tile-content>
 
-              <v-list-tile-action>
-                <v-icon color="primary">add_circle</v-icon>
+              <v-list-tile-action v-if="!item.isExist">
+                <v-icon color="primary">add</v-icon>
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
@@ -42,10 +42,19 @@
           <v-btn
             v-if="hasMoreResults"
             color="primary"
+            :loading="addModalListLoading"
+            :disabled="addModalListLoading"
             @click="getMoreItems()"
           >
             More
           </v-btn>
+        </v-flex>
+
+        <v-flex
+          xs12
+          d-flex
+        >
+          <loader v-show="addModalListLoading" />
         </v-flex>
       </v-layout>
     </v-container>
@@ -53,12 +62,13 @@
 </template>
 
 <script>
+import Loader from '@/components/common/Loader'
+
 export default {
   name: 'StepperContentList',
-  props: ['searchResults', 'hasMoreResults'],
-  data () {
-    return {
-    }
+  props: ['searchResults', 'hasMoreResults', 'addModalListLoading'],
+  components: {
+    'loader': Loader
   },
   methods: {
     getMoreItems () {
@@ -67,7 +77,8 @@ export default {
     changeStep (num) {
       this.$emit('changeStep', num)
     },
-    confirm (item) {
+    confirm (item, isExist) {
+      if (isExist) return
       this.$emit('confirm', item)
     }
   }

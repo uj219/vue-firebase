@@ -1,6 +1,7 @@
 <template>
   <div class="list">
     <v-container
+      v-show="!listLoading"
       fluid
       grid-list-md
     >
@@ -49,22 +50,28 @@
       <v-layout
         v-else
       >
-        <no-item text="表示できるアイテムがありません" height="400px"/>
+        <no-item text="表示できるアイテムがありません" />
       </v-layout>
+    </v-container>
+
+    <v-container v-show="listLoading">
+      <loader layout="fixed"/>
     </v-container>
   </div>
 </template>
 
 <script>
-import NoItem from '@/components/common/NoItem'
 import BtnFavorite from '@/components/common/BtnFavorite'
+import NoItem from '@/components/common/NoItem'
+import Loader from '@/components/common/Loader'
 
 export default {
   name: 'List',
-  props: ['list', 'currentUser'],
+  props: ['list', 'listLoading', 'currentUser'],
   components: {
+    'btn-favorite': BtnFavorite,
     'no-item': NoItem,
-    'btn-favorite': BtnFavorite
+    'loader': Loader
   },
   data () {
     return {
@@ -88,3 +95,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-card__media__content {
+  background: rgba(0,0,0,0.3);
+}
+</style>

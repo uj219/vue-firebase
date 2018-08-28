@@ -13,6 +13,7 @@
         <v-menu
           v-if="currentUser"
           offset-y
+          transition="slide-x-transition"
         >
           <v-avatar
             slot="activator"

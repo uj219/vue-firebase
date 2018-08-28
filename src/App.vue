@@ -1,11 +1,19 @@
 <template>
   <div id="app">
     <v-app>
-      <toolbar :pageTitle="pageTitle" :hasBackLink="hasBackLink" :currentUser="currentUser" @login="login" @logout="logout"/>
+      <toolbar
+        :pageTitle="pageTitle"
+        :hasBackLink="hasBackLink"
+        :currentUser="currentUser"
+        @login="login"
+        @logout="logout"
+      />
 
       <router-view
         :list="list"
+        :listLoading="listLoading"
         :currentUser="currentUser"
+        :isAddingItem="isAddingItem"
         @syncHeader="syncHeader"
         @addItem="addItem"
         @showSnackbar="showSnackbar"
@@ -14,9 +22,16 @@
         @syncLoginDialog="syncLoginDialog"
       />
 
-      <snackbar :snackbar="snackbar" @closeSnackbar="closeSnackbar"/>
+      <snackbar
+        :snackbar="snackbar"
+        @closeSnackbar="closeSnackbar"
+      />
 
-      <login-dialog :loginDialog="loginDialog" @login="login" @syncLoginDialog="syncLoginDialog"/>
+      <login-dialog
+        :loginDialog="loginDialog"
+        @login="login"
+        @syncLoginDialog="syncLoginDialog"
+      />
     </v-app>
   </div>
 </template>
@@ -40,12 +55,14 @@ export default {
       pageTitle: '',
       hasBackLink: false,
       list: [],
+      listLoading: true,
       snackbar: {
         isShown: false,
         color: '',
         text: ''
       },
-      loginDialog: false
+      loginDialog: false,
+      isAddingItem: false
     }
   },
   created () {
@@ -70,6 +87,7 @@ export default {
     getList () {
       // 重複しないよう毎回初期化
       this.list = []
+      this.listLoading = true
 
       FirebaseFunction.getListFirestore()
         .then((querySnapshotList) => {
@@ -90,6 +108,8 @@ export default {
                   data: docList.data(),
                   userFav: userFav
                 })
+
+                this.listLoading = false
               })
           })
         })
@@ -99,11 +119,16 @@ export default {
         this.syncLoginDialog(true)
         return
       }
+
+      this.isAddingItem = true
+
       FirebaseFunction.addItemFirestore(item, this.currentUser.uid)
         .then((response) => {
+          this.isAddingItem = false
           this.showSnackbar(response)
           this.getList()
         }).catch((error) => {
+          this.isAddingItem = false
           this.showSnackbar(error)
         })
     },
@@ -165,7 +190,7 @@ export default {
             if (el.id === itemId) el.userFav.push(userId)
           })
           this.showSnackbar({
-            color: 'success',
+            color: 'pink',
             text: 'お気に入りに追加しました'
           })
         }).catch((error) => {
@@ -184,7 +209,7 @@ export default {
             }
           })
           this.showSnackbar({
-            color: 'success',
+            color: 'pink',
             text: 'お気に入りから削除しました'
           })
         }).catch((error) => {

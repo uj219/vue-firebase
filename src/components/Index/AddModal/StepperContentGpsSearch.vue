@@ -53,6 +53,8 @@
             <v-btn
               v-if="valid"
               color="primary"
+              :loading="addModalListLoading"
+              :disabled="addModalListLoading"
               @click="setSearchOptions"
             >
               Search
@@ -83,6 +85,7 @@
 <script>
 export default {
   name: 'stepperContentGpsSearch',
+  props: ['addModalListLoading'],
   data () {
     return {
       locationAvailable: true,
