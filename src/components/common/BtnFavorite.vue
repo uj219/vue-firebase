@@ -1,11 +1,19 @@
 <template>
   <div class="btn-favorite">
     <v-btn
-      v-if="currentUser"
+      v-if="currentUser && !isFav"
       icon
       flat
-      :color="color"
-      @click="toggleFav(!isFav, item.id, currentUser.uid)"
+      @click="addFav(item.id, currentUser.uid)"
+    >
+      <v-icon>favorite</v-icon>
+    </v-btn>
+    <v-btn
+      v-else-if="currentUser && isFav"
+      icon
+      flat
+      color="pink"
+      @click="deleteFav(item.id, currentUser.uid)"
     >
       <v-icon>favorite</v-icon>
     </v-btn>
@@ -13,7 +21,6 @@
       v-else
       icon
       flat
-      color="color"
       @click="syncLoginDialog(true)"
     >
       <v-icon>favorite</v-icon>
@@ -25,29 +32,17 @@
 export default {
   name: 'BtnFavorite',
   props: ['item', 'currentUser'],
-  data () {
-    return {
-      isFav: false,
-      color: 'gray'
-    }
-  },
-  created () {
-    if (typeof this.$props.item.data.userFav === 'undefined' || this.$props.currentUser === null) return
-    if (this.$props.item.data.userFav[this.$props.currentUser.uid]) {
-      this.isFav = true
-      this.color = 'pink'
+  computed: {
+    isFav: function () {
+      return this.$props.item.userFav.includes(this.$props.currentUser.uid)
     }
   },
   methods: {
-    toggleFav (bool, itemId, userId) {
-      this.$emit('toggleFav', bool, itemId, userId)
-      if (bool) {
-        this.color = 'pink'
-        this.isFav = true
-      } else {
-        this.color = 'gray'
-        this.isFav = false
-      }
+    addFav (itemId, userId) {
+      this.$emit('addFav', itemId, userId)
+    },
+    deleteFav (itemId, userId) {
+      this.$emit('deleteFav', itemId, userId)
     },
     syncLoginDialog (bool) {
       this.$emit('syncLoginDialog', bool)

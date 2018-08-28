@@ -84,6 +84,21 @@ export function getItemFirestore (id) {
 }
 
 // -------------------------------------------------------
+// アイテムのお気に入りの取得
+// -------------------------------------------------------
+export function getItemUserFavFirestore (id) {
+  return db.collection('restaurants').doc(id).collection('userFav').get()
+    .then((querySnapshot) => {
+      return querySnapshot
+    }).catch((error) => {
+      return {
+        color: 'error',
+        text: error
+      }
+    })
+}
+
+// -------------------------------------------------------
 // アイテムの追加
 // -------------------------------------------------------
 export function addItemFirestore (itemObj, userId) {
@@ -134,34 +149,35 @@ export function addItemFirestore (itemObj, userId) {
 }
 
 // -------------------------------------------------------
-// お気に入りに追加
+// お気に入りに追加（一括書き込み）
 // -------------------------------------------------------
-// 複数のドキュメントから取得・更新するのでトランザクションを使用
-export function toggleFavFirestore (bool, itemId, userId) {
+export function addFavFirestore (itemId, userId) {
+  const batch = db.batch()
+
   // アイテム側
-  const itemRef = db.collection('restaurants').doc(itemId)
-  let itemData = {}
-  itemData[userId] = bool
+  const itemRef = db.collection('restaurants').doc(itemId).collection('userFav').doc(userId)
+  batch.set(itemRef, {isFav: true})
 
   // ユーザー側
-  const userRef = db.collection('users').doc(userId)
-  let userData = {}
-  userData[itemId] = bool
+  const userRef = db.collection('users').doc(userId).collection('fav').doc(itemId)
+  batch.set(userRef, {isFav: true})
 
-  return db.runTransaction(async (transaction) => {
-    const [itemDoc, userDoc] = await Promise.all([
-      transaction.get(itemRef),
-      transaction.get(userRef)
-    ])
+  return batch.commit()
+}
 
-    if (typeof itemDoc.data().userFav !== 'undefined') {
-      itemData = Object.assign(itemDoc.data().userFav, itemData)
-    }
-    transaction.update(itemRef, {userFav: itemData})
+// -------------------------------------------------------
+// お気に入りに削除（一括書き込み）
+// -------------------------------------------------------
+export function deleteFavFirestore (itemId, userId) {
+  const batch = db.batch()
 
-    if (typeof userDoc.data().fav !== 'undefined') {
-      userData = Object.assign(userDoc.data().fav, userData)
-    }
-    transaction.update(userRef, {fav: userData})
-  })
+  // アイテム側
+  const itemRef = db.collection('restaurants').doc(itemId).collection('userFav').doc(userId)
+  batch.delete(itemRef)
+
+  // ユーザー側
+  const userRef = db.collection('users').doc(userId).collection('fav').doc(itemId)
+  batch.delete(userRef)
+
+  return batch.commit()
 }
