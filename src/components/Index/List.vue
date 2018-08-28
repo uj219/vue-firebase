@@ -55,7 +55,7 @@
     </v-container>
 
     <v-container v-show="listLoading">
-      <loader />
+      <loader layout="fixed"/>
     </v-container>
   </div>
 </template>

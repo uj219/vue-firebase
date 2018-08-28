@@ -47,18 +47,26 @@
             More
           </v-btn>
         </v-flex>
+
+        <v-flex
+          xs12
+          d-flex
+        >
+          <loader v-show="addModalListLoading" />
+        </v-flex>
       </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
+import Loader from '@/components/common/Loader'
+
 export default {
   name: 'StepperContentList',
-  props: ['searchResults', 'hasMoreResults'],
-  data () {
-    return {
-    }
+  props: ['searchResults', 'hasMoreResults', 'addModalListLoading'],
+  components: {
+    'loader': Loader
   },
   methods: {
     getMoreItems () {

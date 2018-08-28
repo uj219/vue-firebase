@@ -78,7 +78,7 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <stepper-content-list :searchResults="searchResults" :hasMoreResults="hasMoreResults" @changeStep="changeStep" @getMoreItems="getMoreItems" @confirm="confirm" />
+                <stepper-content-list :searchResults="searchResults" :hasMoreResults="hasMoreResults" :addModalListLoading="addModalListLoading" @changeStep="changeStep" @getMoreItems="getMoreItems" @confirm="confirm" />
               </v-stepper-content>
             </v-stepper-items>
           </v-stepper>
@@ -115,6 +115,7 @@ export default {
       searchOptions: {},
       searchResults: [],
       hasMoreResults: true,
+      addModalListLoading: false,
       confirmDialog: false,
       confirmItem: {}
     }
@@ -142,23 +143,28 @@ export default {
       this.getItems()
     },
     getItems () {
+      this.addModalListLoading = true
+
       const params = Object.assign({
         start: this.searchOffset,
         count: this.searchLimit
       }, this.searchOptions)
 
-      HotpepperFunction.getListHotpepper(params).then((response) => {
-        if (response.results_returned < this.searchLimit) this.hasMoreResults = false
-        response.shop.forEach((el) => {
-          this.searchResults.push(el)
-        })
+      HotpepperFunction.getListHotpepper(params)
+        .then((response) => {
+          if (response.results_returned < this.searchLimit) this.hasMoreResults = false
+          response.shop.forEach((el) => {
+            this.searchResults.push(el)
+          })
 
-        if (this.step === 3) return
-        this.changeStep(3)
-      }).catch((error) => {
-        // todo: errorが正しく渡せていない
-        this.$emit('showSnackbar', error)
-      })
+          this.addModalListLoading = false
+
+          if (this.step === 3) return
+          this.changeStep(3)
+        }).catch((error) => {
+          // todo: errorが正しく渡せていない
+          this.$emit('showSnackbar', error)
+        })
     },
     reset () {
       this.searchOptions = {}
