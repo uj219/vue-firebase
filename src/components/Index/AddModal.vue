@@ -117,6 +117,7 @@
     <confirm-dialog
       :confirmDialog="confirmDialog"
       :confirmItem="confirmItem"
+      :isAddingItem="isAddingItem"
       @closeConfirm="closeConfirm"
       @addItem="addItem"
     ></confirm-dialog>
@@ -138,7 +139,7 @@ export default {
     'stepper-content-list': StepperContentList,
     'confirm-dialog': ConfirmDialog
   },
-  props: ['isShown'],
+  props: ['isShown', 'isAddingItem'],
   data () {
     return {
       step: 1,
@@ -194,6 +195,7 @@ export default {
 
           this.addModalListLoading = false
         }).catch((error) => {
+          this.addModalListLoading = false
           // todo: errorが正しく渡せていない
           this.$emit('showSnackbar', error)
         })

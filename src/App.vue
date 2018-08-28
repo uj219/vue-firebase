@@ -13,6 +13,7 @@
         :list="list"
         :listLoading="listLoading"
         :currentUser="currentUser"
+        :isAddingItem="isAddingItem"
         @syncHeader="syncHeader"
         @addItem="addItem"
         @showSnackbar="showSnackbar"
@@ -60,7 +61,8 @@ export default {
         color: '',
         text: ''
       },
-      loginDialog: false
+      loginDialog: false,
+      isAddingItem: false
     }
   },
   created () {
@@ -117,11 +119,16 @@ export default {
         this.syncLoginDialog(true)
         return
       }
+
+      this.isAddingItem = true
+
       FirebaseFunction.addItemFirestore(item, this.currentUser.uid)
         .then((response) => {
+          this.isAddingItem = false
           this.showSnackbar(response)
           this.getList()
         }).catch((error) => {
+          this.isAddingItem = false
           this.showSnackbar(error)
         })
     },
