@@ -190,7 +190,7 @@ export default {
             if (el.id === itemId) el.userFav.push(userId)
           })
           this.showSnackbar({
-            color: 'success',
+            color: 'pink',
             text: 'お気に入りに追加しました'
           })
         }).catch((error) => {
@@ -209,7 +209,7 @@ export default {
             }
           })
           this.showSnackbar({
-            color: 'success',
+            color: 'pink',
             text: 'お気に入りから削除しました'
           })
         }).catch((error) => {
