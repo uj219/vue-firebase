@@ -95,3 +95,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-card__media__content {
+  background: rgba(0,0,0,0.3);
+}
+</style>
