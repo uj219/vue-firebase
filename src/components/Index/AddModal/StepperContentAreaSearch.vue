@@ -58,6 +58,8 @@
             <v-btn
               v-if="small_area_selected.length"
               color="primary"
+              :loading="addModalListLoading"
+              :disabled="addModalListLoading"
               @click="setSearchOptions"
             >
               Search
@@ -74,6 +76,7 @@ import * as HotpepperFunction from '../../../functions/HotpepperFunction'
 
 export default {
   name: 'stepperContentAreaSearch',
+  props: ['addModalListLoading'],
   data () {
     return {
       valid: false,

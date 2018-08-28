@@ -42,6 +42,8 @@
           <v-btn
             v-if="hasMoreResults"
             color="primary"
+            :loading="addModalListLoading"
+            :disabled="addModalListLoading"
             @click="getMoreItems()"
           >
             More

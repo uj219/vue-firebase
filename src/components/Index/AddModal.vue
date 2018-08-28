@@ -18,9 +18,19 @@
         <v-card-text>
           <v-stepper v-model="step">
             <v-stepper-header>
-              <v-stepper-step :complete="step > 1" step="1" editable>検索方法を選択してください</v-stepper-step>
+              <v-stepper-step
+                :complete="step > 1"
+                step="1"
+                editable
+              >
+                検索方法を選択してください
+              </v-stepper-step>
               <v-divider></v-divider>
-              <v-stepper-step :complete="step > 2" step="2" :editable="step > 1">
+              <v-stepper-step
+                :complete="step > 2"
+                step="2"
+                :editable="step > 1"
+              >
                 <span v-if="searchType === 'area'">エリアから探す</span>
                 <span v-if="searchType === 'gps'">現在地から探す</span>
               </v-stepper-step>
@@ -73,12 +83,30 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <stepper-content-area-search v-if="searchType === 'area'" @changeStep="changeStep" @setSearchOptions="setSearchOptions" />
-                <stepper-content-gps-search v-if="searchType === 'gps'" @changeStep="changeStep" @setSearchOptions="setSearchOptions" />
+                <stepper-content-area-search
+                  v-if="searchType === 'area'"
+                  :addModalListLoading="addModalListLoading"
+                  @changeStep="changeStep"
+                  @setSearchOptions="setSearchOptions"
+                />
+
+                <stepper-content-gps-search
+                  v-if="searchType === 'gps'"
+                  :addModalListLoading="addModalListLoading"
+                  @changeStep="changeStep"
+                  @setSearchOptions="setSearchOptions"
+                />
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <stepper-content-list :searchResults="searchResults" :hasMoreResults="hasMoreResults" :addModalListLoading="addModalListLoading" @changeStep="changeStep" @getMoreItems="getMoreItems" @confirm="confirm" />
+                <stepper-content-list
+                  :searchResults="searchResults"
+                  :hasMoreResults="hasMoreResults"
+                  :addModalListLoading="addModalListLoading"
+                  @changeStep="changeStep"
+                  @getMoreItems="getMoreItems"
+                  @confirm="confirm"
+                ></stepper-content-list>
               </v-stepper-content>
             </v-stepper-items>
           </v-stepper>
@@ -86,7 +114,12 @@
       </v-card>
     </v-dialog>
 
-    <confirm-dialog :confirmDialog="confirmDialog" :confirmItem="confirmItem" @closeConfirm="closeConfirm" @addItem="addItem" />
+    <confirm-dialog
+      :confirmDialog="confirmDialog"
+      :confirmItem="confirmItem"
+      @closeConfirm="closeConfirm"
+      @addItem="addItem"
+    ></confirm-dialog>
   </div>
 </template>
 
@@ -136,7 +169,9 @@ export default {
     setSearchOptions (options) {
       this.reset()
       this.searchOptions = options
-      this.getItems()
+      this.getItems().then(() => {
+        this.changeStep(3)
+      })
     },
     getMoreItems () {
       this.searchOffset += this.searchLimit
@@ -150,7 +185,7 @@ export default {
         count: this.searchLimit
       }, this.searchOptions)
 
-      HotpepperFunction.getListHotpepper(params)
+      return HotpepperFunction.getListHotpepper(params)
         .then((response) => {
           if (response.results_returned < this.searchLimit) this.hasMoreResults = false
           response.shop.forEach((el) => {
@@ -158,9 +193,6 @@ export default {
           })
 
           this.addModalListLoading = false
-
-          if (this.step === 3) return
-          this.changeStep(3)
         }).catch((error) => {
           // todo: errorが正しく渡せていない
           this.$emit('showSnackbar', error)
