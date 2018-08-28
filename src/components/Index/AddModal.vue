@@ -126,6 +126,7 @@
 
 <script>
 import * as HotpepperFunction from '../../functions/HotpepperFunction'
+import * as FirebaseFunction from '../../functions/FirebaseFunction'
 import StepperContentAreaSearch from '@/components/Index/AddModal/StepperContentAreaSearch'
 import StepperContentGpsSearch from '@/components/Index/AddModal/StepperContentGpsSearch'
 import StepperContentList from '@/components/Index/AddModal/StepperContentList'
@@ -188,9 +189,19 @@ export default {
 
       return HotpepperFunction.getListHotpepper(params)
         .then((response) => {
+          // 追加で読み込むアイテムがまだあるかどうか
           if (response.results_returned < this.searchLimit) this.hasMoreResults = false
+
           response.shop.forEach((el) => {
-            this.searchResults.push(el)
+            // DBに既に追加されているかチェック
+            FirebaseFunction.getItemFirestore(el.id)
+              .then((doc) => {
+                if (doc.exists) {
+                  this.searchResults.push(Object.assign(el, {isExist: true}))
+                } else {
+                  this.searchResults.push(Object.assign(el, {isExist: false}))
+                }
+              })
           })
 
           this.addModalListLoading = false
