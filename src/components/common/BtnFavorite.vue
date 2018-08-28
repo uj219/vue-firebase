@@ -25,6 +25,7 @@
     >
       <v-icon>favorite</v-icon>
     </v-btn>
+    <span class="fav-count">{{favCount}}</span>
   </div>
 </template>
 
@@ -35,6 +36,9 @@ export default {
   computed: {
     isFav: function () {
       return this.$props.item.userFav.includes(this.$props.currentUser.uid)
+    },
+    favCount: function () {
+      return this.$props.item.userFav.length
     }
   },
   methods: {
@@ -50,3 +54,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.fav-count {
+  color: gray;
+  position: relative;
+  top: 2px;
+}
+</style>
