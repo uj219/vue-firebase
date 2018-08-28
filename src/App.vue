@@ -115,7 +115,6 @@ export default {
           if (isNewUser) this.addUser(result.user.uid)
 
           this.syncCurrentUser()
-          this.getList()
           this.showSnackbar({
             color: 'success',
             text: 'ログインしました'
