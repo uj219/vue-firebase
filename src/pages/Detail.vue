@@ -15,12 +15,13 @@
       <div class="data-box__item">
         <div class="data-box__item__inner">
           <span>{{item.userFav.length}}</span>
-          <v-icon size="18">favorite</v-icon>
+          <v-icon size="18" :color="color">favorite</v-icon>
         </div>
       </div>
       <div class="data-box__item">
         <div class="data-box__item__inner">
-          <span>{{item.distance}}m</span>
+          <span v-if="location.available">{{item.distance}}m</span>
+          <span v-else>-</span>
           <v-icon size="18">place</v-icon>
         </div>
       </div>
@@ -61,28 +62,37 @@
       </p>
     </v-container>
     <v-footer fixed height="42">
-      <v-btn
-        absolute
-        dark
-        fab
-        top
-        right
-        color="pink"
-      >
-        <v-icon>favorite</v-icon>
-      </v-btn>
+      <btn-favorite-footer
+        :currentUser="currentUser"
+        :item="item"
+        @addFav="addFav"
+        @deleteFav="deleteFav"
+        @syncLoginDialog="syncLoginDialog"
+      />
     </v-footer>
   </div>
 </template>
 
 <script>
+import BtnFavoriteFooter from '@/components/Detail/BtnFavoriteFooter'
+
 export default {
   name: 'Detail',
-  props: ['list'],
+  props: ['list', 'currentUser', 'location'],
+  components: {
+    'btn-favorite-footer': BtnFavoriteFooter
+  },
   data () {
     return {
       item: {},
-      pageTitle: ''
+      pageTitle: '',
+      isFav: false
+    }
+  },
+  computed: {
+    color: function () {
+      if (this.item.userFav.includes(this.$props.currentUser.uid)) return 'pink'
+      else return 'gray'
     }
   },
   created () {
@@ -95,6 +105,15 @@ export default {
         return el.id === this.$route.params.id
       })
       this.pageTitle = this.item.data.name
+    },
+    addFav (itemId, userId) {
+      this.$emit('addFav', itemId, userId)
+    },
+    deleteFav (itemId, userId) {
+      this.$emit('deleteFav', itemId, userId)
+    },
+    syncLoginDialog (bool) {
+      this.$emit('syncLoginDialog', bool)
     }
   }
 }

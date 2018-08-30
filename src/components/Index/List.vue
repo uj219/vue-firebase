@@ -41,7 +41,9 @@
             <v-card-actions>
               <div class="v-card__actions__left">
                 <span>
-                  <v-icon>place</v-icon> {{item.distance}} m
+                  <v-icon>place</v-icon>
+                  <span v-if="location.available" class="d-inline">{{item.distance}}</span>
+                  <span v-else class="d-inline">-</span>
                 </span>
 
                 <span>
@@ -78,7 +80,7 @@ moment.locale('ja')
 
 export default {
   name: 'List',
-  props: ['list', 'listLoading', 'currentUser'],
+  props: ['list', 'listLoading', 'currentUser', 'location'],
   components: {
     'btn-favorite': BtnFavorite,
     'no-item': NoItem,
