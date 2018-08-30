@@ -17,7 +17,6 @@
         :active.sync="bottomNav"
         :value="true"
         absolute
-        color="white"
       >
         <v-btn
           color="primary"

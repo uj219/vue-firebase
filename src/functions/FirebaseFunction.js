@@ -114,7 +114,9 @@ export function addItemFirestore (itemObj, userId) {
     genre: itemObj.genre,
     food: itemObj.food,
     catch: itemObj.catch,
-    photo: itemObj.photo
+    photo: itemObj.photo,
+    open: itemObj.open,
+    budget: itemObj.budget
   }, Util.getTimeStampCreated(userId))
 
   const docRef = db.collection('restaurants').doc(itemObj.id)
