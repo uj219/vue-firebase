@@ -74,6 +74,6 @@ export default {
 <style scoped>
 .index {
   margin-top: 60px;
-  margin-bottom: 80px;
+  margin-bottom: 120px;
 }
 </style>
