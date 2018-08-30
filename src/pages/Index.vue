@@ -11,7 +11,7 @@
 
     <bottom-nav
       :current="bottomNav"
-      @syncHeader="syncHeader"
+      @sortList="sortList"
       @syncAddModal="syncAddModal"
     />
 
@@ -44,12 +44,9 @@ export default {
       addModal: false
     }
   },
-  created () {
-    this.syncHeader(this.bottomNav)
-  },
   methods: {
-    syncHeader (pageTitle) {
-      this.$emit('syncHeader', pageTitle)
+    sortList (sort) {
+      this.$emit('sortList', sort)
     },
     syncAddModal (bool) {
       this.addModal = bool

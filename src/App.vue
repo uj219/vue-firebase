@@ -15,6 +15,7 @@
         :currentUser="currentUser"
         :isAddingItem="isAddingItem"
         @syncHeader="syncHeader"
+        @sortList="sortList"
         @addItem="addItem"
         @showSnackbar="showSnackbar"
         @addFav="addFav"
@@ -37,6 +38,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import * as FirebaseFunction from './functions/FirebaseFunction'
 import Toolbar from '@/components/common/Toolbar'
 import Snackbar from '@/components/common/Snackbar'
@@ -52,7 +54,7 @@ export default {
   data () {
     return {
       currentUser: null,
-      pageTitle: '',
+      pageTitle: 'recent',
       hasBackLink: false,
       list: [],
       listLoading: true,
@@ -66,7 +68,7 @@ export default {
     }
   },
   created () {
-    this.getList()
+    this.getList(this.listSort)
   },
   methods: {
     syncHeader (pageTitle) {
@@ -92,7 +94,10 @@ export default {
       FirebaseFunction.getListFirestore()
         .then((querySnapshotList) => {
           // 空であれば何もしない
-          if (querySnapshotList.empty) return
+          if (querySnapshotList.empty) {
+            this.listLoading = false
+            return
+          }
 
           querySnapshotList.forEach((docList) => {
             const userFav = []
@@ -108,11 +113,26 @@ export default {
                   data: docList.data(),
                   userFav: userFav
                 })
-
                 this.listLoading = false
               })
           })
         })
+    },
+    sortList (sort) {
+      this.listLoading = true
+
+      if (sort === 'recent') {
+        this.list.sort((a, b) => {
+          return moment(a.data._created_at).format('x') - moment(b.data._created_at).format('x')
+        }).reverse()
+        this.listLoading = false
+      } else if (sort === 'favorites') {
+        this.list.sort((a, b) => {
+          return a.userFav.length - b.userFav.length
+        }).reverse()
+        this.listLoading = false
+      }
+      this.syncHeader(sort)
     },
     addItem (item) {
       if (!this.currentUser) {

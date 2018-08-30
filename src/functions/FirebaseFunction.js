@@ -60,7 +60,7 @@ export function getUserFavFirestore (userId) {
 // リストの取得(フィルタ機能あり)
 // -------------------------------------------------------
 export function getListFirestore () {
-  return db.collection('restaurants').get()
+  return db.collection('restaurants').orderBy('_created_at', 'desc').get()
     .then((querySnapshot) => {
       return querySnapshot
     }).catch((error) => {
