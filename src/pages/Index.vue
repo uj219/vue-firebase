@@ -11,13 +11,14 @@
 
     <bottom-nav
       :current="bottomNav"
-      @syncHeader="syncHeader"
+      @sortList="sortList"
       @syncAddModal="syncAddModal"
     />
 
     <add-modal
       :isShown="addModal"
       :isAddingItem="isAddingItem"
+      :location="location"
       @syncAddModal="syncAddModal"
       @addItem="addItem"
       @showSnackbar="showSnackbar"
@@ -37,19 +38,16 @@ export default {
     'bottom-nav': BottomNav,
     'add-modal': AddModal
   },
-  props: ['list', 'listLoading', 'currentUser', 'isAddingItem'],
+  props: ['list', 'listLoading', 'currentUser', 'isAddingItem', 'location'],
   data () {
     return {
       bottomNav: 'recent',
       addModal: false
     }
   },
-  created () {
-    this.syncHeader(this.bottomNav)
-  },
   methods: {
-    syncHeader (pageTitle) {
-      this.$emit('syncHeader', pageTitle)
+    sortList (sort) {
+      this.$emit('sortList', sort)
     },
     syncAddModal (bool) {
       this.addModal = bool

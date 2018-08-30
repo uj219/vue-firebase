@@ -23,17 +23,17 @@
           color="primary"
           flat
           value="recent"
-          @click="syncHeader('recent')"
+          @click="sortList('recent')"
         >
           <span>Recent</span>
-          <v-icon>history</v-icon>
+          <v-icon>schedule</v-icon>
         </v-btn>
 
         <v-btn
           color="primary"
           flat
           value="favorites"
-          @click="syncHeader('favorites')"
+          @click="sortList('favorites')"
         >
           <span>Favorites</span>
           <v-icon>favorite</v-icon>
@@ -43,7 +43,7 @@
           color="primary"
           flat
           value="nearby"
-          @click="syncHeader('nearby')"
+          @click="sortList('nearby')"
         >
           <span>Nearby</span>
           <v-icon>place</v-icon>
@@ -66,8 +66,8 @@ export default {
     this.bottomNav = this.$props.current
   },
   methods: {
-    syncHeader (pageTitle) {
-      this.$emit('syncHeader', pageTitle)
+    sortList (sort) {
+      this.$emit('sortList', sort)
     },
     syncAddModal (bool) {
       this.$emit('syncAddModal', bool)

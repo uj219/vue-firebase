@@ -1,6 +1,6 @@
 <template>
   <div class="stepper-content-area-search">
-    <v-form v-model="valid" ref="form" v-if="locationAvailable">
+    <v-form v-model="valid" ref="form" v-if="location.available">
       <v-container>
         <v-subheader>
           <v-icon>near_me</v-icon>
@@ -12,7 +12,7 @@
               label="latitude"
               outline
               readonly
-              :value="latitude"
+              :value="location.latitude"
             ></v-text-field>
           </v-flex>
 
@@ -21,7 +21,7 @@
               label="longitude"
               outline
               readonly
-              :value="longitude"
+              :value="location.longitude"
             ></v-text-field>
           </v-flex>
 
@@ -71,27 +71,24 @@
           <v-icon>near_me</v-icon>
           現在地から探す
         </v-subheader>
-        <v-alert
-          :value="true"
-          type="error"
-        >
-          お使いのブラウザでは位置情報をご利用できません。
-        </v-alert>
+        <no-item layout="static" text="お使いのブラウザでは位置情報をご利用できません" />
       </v-container>
     </div>
   </div>
 </template>
 
 <script>
+import NoItem from '@/components/common/NoItem'
+
 export default {
   name: 'stepperContentGpsSearch',
-  props: ['addModalListLoading'],
+  props: ['addModalListLoading', 'location'],
+  components: {
+    'no-item': NoItem
+  },
   data () {
     return {
-      locationAvailable: true,
       valid: false,
-      latitude: 0,
-      longitude: 0,
       range: 3,
       rangeLabels: [
         '300m',
@@ -103,25 +100,14 @@ export default {
     }
   },
   created () {
-    this.getLocation()
+    if (this.$props.location.available) this.valid = true
   },
   methods: {
-    getLocation () {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          this.latitude = position.coords.latitude
-          this.longitude = position.coords.longitude
-          this.valid = true
-        })
-      } else {
-        this.locationAvailable = false
-      }
-    },
     setSearchOptions () {
       if (!this.$refs.form.validate()) return
       this.$emit('setSearchOptions', {
-        lat: this.latitude,
-        lng: this.longitude,
+        lat: this.$props.location.latitude,
+        lng: this.$props.location.longitude,
         range: this.range
       })
     },

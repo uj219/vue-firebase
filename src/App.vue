@@ -14,7 +14,9 @@
         :listLoading="listLoading"
         :currentUser="currentUser"
         :isAddingItem="isAddingItem"
+        :location="location"
         @syncHeader="syncHeader"
+        @sortList="sortList"
         @addItem="addItem"
         @showSnackbar="showSnackbar"
         @addFav="addFav"
@@ -37,6 +39,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+import geolib from 'geolib'
 import * as FirebaseFunction from './functions/FirebaseFunction'
 import Toolbar from '@/components/common/Toolbar'
 import Snackbar from '@/components/common/Snackbar'
@@ -52,7 +56,7 @@ export default {
   data () {
     return {
       currentUser: null,
-      pageTitle: '',
+      pageTitle: 'recent',
       hasBackLink: false,
       list: [],
       listLoading: true,
@@ -62,11 +66,17 @@ export default {
         text: ''
       },
       loginDialog: false,
-      isAddingItem: false
+      isAddingItem: false,
+      location: {
+        available: true,
+        latitude: 0,
+        longitude: 0
+      }
     }
   },
   created () {
-    this.getList()
+    this.getList(this.listSort)
+    this.getLocation()
   },
   methods: {
     syncHeader (pageTitle) {
@@ -92,10 +102,17 @@ export default {
       FirebaseFunction.getListFirestore()
         .then((querySnapshotList) => {
           // 空であれば何もしない
-          if (querySnapshotList.empty) return
+          if (querySnapshotList.empty) {
+            this.listLoading = false
+            return
+          }
 
           querySnapshotList.forEach((docList) => {
             const userFav = []
+            const distance = geolib.getDistance(
+              {latitude: this.location.latitude, longitude: this.location.longitude},
+              {latitude: docList.data().lat, longitude: docList.data().lng}
+            )
 
             FirebaseFunction.getItemUserFavFirestore(docList.id)
               .then((querySnapshotUserFav) => {
@@ -106,13 +123,34 @@ export default {
                 this.list.push({
                   id: docList.id,
                   data: docList.data(),
-                  userFav: userFav
+                  userFav: userFav,
+                  distance: distance
                 })
-
                 this.listLoading = false
               })
           })
         })
+    },
+    sortList (sort) {
+      this.listLoading = true
+
+      if (sort === 'recent') {
+        this.list.sort((a, b) => {
+          return moment(a.data._created_at).format('x') - moment(b.data._created_at).format('x')
+        }).reverse()
+        this.listLoading = false
+      } else if (sort === 'favorites') {
+        this.list.sort((a, b) => {
+          return a.userFav.length - b.userFav.length
+        }).reverse()
+        this.listLoading = false
+      } else if (sort === 'nearby') {
+        this.list.sort((a, b) => {
+          return a.distance - b.distance
+        })
+        this.listLoading = false
+      }
+      this.syncHeader(sort)
     },
     addItem (item) {
       if (!this.currentUser) {
@@ -131,6 +169,17 @@ export default {
           this.isAddingItem = false
           this.showSnackbar(error)
         })
+    },
+    getLocation () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.location.latitude = position.coords.latitude
+          this.location.longitude = position.coords.longitude
+          this.valid = true
+        })
+      } else {
+        this.location.available = false
+      }
     },
     login () {
       FirebaseFunction.login()

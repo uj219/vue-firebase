@@ -93,6 +93,7 @@
                 <stepper-content-gps-search
                   v-if="searchType === 'gps'"
                   :addModalListLoading="addModalListLoading"
+                  :location="location"
                   @changeStep="changeStep"
                   @setSearchOptions="setSearchOptions"
                 />
@@ -140,7 +141,7 @@ export default {
     'stepper-content-list': StepperContentList,
     'confirm-dialog': ConfirmDialog
   },
-  props: ['isShown', 'isAddingItem'],
+  props: ['isShown', 'isAddingItem', 'location'],
   data () {
     return {
       step: 1,
