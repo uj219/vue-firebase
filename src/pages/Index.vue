@@ -4,6 +4,7 @@
       :list="list"
       :listLoading="listLoading"
       :currentUser="currentUser"
+      :location="location"
       @addFav="addFav"
       @deleteFav="deleteFav"
       @syncLoginDialog="syncLoginDialog"

@@ -75,7 +75,7 @@ export default {
     }
   },
   created () {
-    this.getList(this.listSort)
+    this.getList()
     this.getLocation()
   },
   methods: {
@@ -281,5 +281,11 @@ export default {
 a {
   text-decoration: none!important;
   color: inherit;
+}
+.theme--light .v-toolbar {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.theme--light .v-bottom-nav {
+  background-color: rgba(255, 255, 255, 0.95);
 }
 </style>
