@@ -39,6 +39,15 @@
             </router-link>
 
             <v-card-actions>
+              <div class="v-card__actions__left">
+                <span>
+                  <v-icon>place</v-icon> {{item.distance}} m
+                </span>
+
+                <span>
+                  <v-icon>schedule</v-icon> {{getTimeago(item.data._created_at)}}
+                </span>
+              </div>
               <v-spacer></v-spacer>
               <btn-favorite :currentUser="currentUser" :item="item" @addFav="addFav" @deleteFav="deleteFav" @syncLoginDialog="syncLoginDialog"/>
             </v-card-actions>
@@ -61,9 +70,11 @@
 </template>
 
 <script>
+import moment from 'moment'
 import BtnFavorite from '@/components/common/BtnFavorite'
 import NoItem from '@/components/common/NoItem'
 import Loader from '@/components/common/Loader'
+moment.locale('ja')
 
 export default {
   name: 'List',
@@ -83,6 +94,9 @@ export default {
     }
   },
   methods: {
+    getTimeago (datetime) {
+      return moment(datetime).fromNow()
+    },
     addFav (itemId, userId) {
       this.$emit('addFav', itemId, userId)
     },
@@ -99,5 +113,20 @@ export default {
 <style>
 .v-card__media__content {
   background: rgba(0,0,0,0.3);
+}
+</style>
+
+<style scoped>
+.v-card__actions__left {
+  font-size: 10px;
+}
+.v-card__actions__left .v-icon {
+  font-size: 15px;
+}
+.v-card__actions__left span {
+  display: block;
+}
+.v-card__actions__left span:not(:last-child) {
+  margin-bottom: 3px;
 }
 </style>

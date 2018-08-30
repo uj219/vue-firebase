@@ -26,7 +26,7 @@
           @click="sortList('recent')"
         >
           <span>Recent</span>
-          <v-icon>history</v-icon>
+          <v-icon>schedule</v-icon>
         </v-btn>
 
         <v-btn
