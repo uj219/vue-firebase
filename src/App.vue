@@ -14,6 +14,7 @@
         :listLoading="listLoading"
         :currentUser="currentUser"
         :isAddingItem="isAddingItem"
+        :location="location"
         @syncHeader="syncHeader"
         @sortList="sortList"
         @addItem="addItem"
@@ -64,11 +65,17 @@ export default {
         text: ''
       },
       loginDialog: false,
-      isAddingItem: false
+      isAddingItem: false,
+      location: {
+        available: true,
+        latitude: 0,
+        longitude: 0
+      }
     }
   },
   created () {
     this.getList(this.listSort)
+    this.getLocation()
   },
   methods: {
     syncHeader (pageTitle) {
@@ -151,6 +158,17 @@ export default {
           this.isAddingItem = false
           this.showSnackbar(error)
         })
+    },
+    getLocation () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.location.latitude = position.coords.latitude
+          this.location.longitude = position.coords.longitude
+          this.valid = true
+        })
+      } else {
+        this.location.available = false
+      }
     },
     login () {
       FirebaseFunction.login()

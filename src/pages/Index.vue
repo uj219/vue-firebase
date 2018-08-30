@@ -18,6 +18,7 @@
     <add-modal
       :isShown="addModal"
       :isAddingItem="isAddingItem"
+      :location="location"
       @syncAddModal="syncAddModal"
       @addItem="addItem"
       @showSnackbar="showSnackbar"
@@ -37,7 +38,7 @@ export default {
     'bottom-nav': BottomNav,
     'add-modal': AddModal
   },
-  props: ['list', 'listLoading', 'currentUser', 'isAddingItem'],
+  props: ['list', 'listLoading', 'currentUser', 'isAddingItem', 'location'],
   data () {
     return {
       bottomNav: 'recent',
