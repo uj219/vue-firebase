@@ -45,9 +45,15 @@ export default {
       addModal: false
     }
   },
+  created () {
+    this.syncHeader('recent')
+  },
   methods: {
     sortList (sort) {
       this.$emit('sortList', sort)
+    },
+    syncHeader (pageTitle) {
+      this.$emit('syncHeader', pageTitle)
     },
     syncAddModal (bool) {
       this.addModal = bool
@@ -74,6 +80,6 @@ export default {
 <style scoped>
 .index {
   margin-top: 60px;
-  margin-bottom: 80px;
+  margin-bottom: 120px;
 }
 </style>
