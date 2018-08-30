@@ -40,6 +40,7 @@
 
 <script>
 import moment from 'moment'
+import geolib from 'geolib'
 import * as FirebaseFunction from './functions/FirebaseFunction'
 import Toolbar from '@/components/common/Toolbar'
 import Snackbar from '@/components/common/Snackbar'
@@ -108,6 +109,10 @@ export default {
 
           querySnapshotList.forEach((docList) => {
             const userFav = []
+            const distance = geolib.getDistance(
+              {latitude: this.location.latitude, longitude: this.location.longitude},
+              {latitude: docList.data().lat, longitude: docList.data().lng}
+            )
 
             FirebaseFunction.getItemUserFavFirestore(docList.id)
               .then((querySnapshotUserFav) => {
@@ -118,7 +123,8 @@ export default {
                 this.list.push({
                   id: docList.id,
                   data: docList.data(),
-                  userFav: userFav
+                  userFav: userFav,
+                  distance: distance
                 })
                 this.listLoading = false
               })
@@ -137,6 +143,11 @@ export default {
         this.list.sort((a, b) => {
           return a.userFav.length - b.userFav.length
         }).reverse()
+        this.listLoading = false
+      } else if (sort === 'nearby') {
+        this.list.sort((a, b) => {
+          return a.distance - b.distance
+        })
         this.listLoading = false
       }
       this.syncHeader(sort)
