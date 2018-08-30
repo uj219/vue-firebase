@@ -91,8 +91,11 @@ export default {
   },
   computed: {
     color: function () {
-      if (this.item.userFav.includes(this.$props.currentUser.uid)) return 'pink'
-      else return 'gray'
+      if (this.$props.currentUser !== null && this.item.userFav.includes(this.$props.currentUser.uid)) {
+        return 'pink'
+      } else {
+        return 'gray'
+      }
     }
   },
   created () {
