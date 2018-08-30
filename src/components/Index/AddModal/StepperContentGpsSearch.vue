@@ -71,21 +71,21 @@
           <v-icon>near_me</v-icon>
           現在地から探す
         </v-subheader>
-        <v-alert
-          :value="true"
-          type="error"
-        >
-          お使いのブラウザでは位置情報をご利用できません。
-        </v-alert>
+        <no-item layout="static" text="お使いのブラウザでは位置情報をご利用できません" />
       </v-container>
     </div>
   </div>
 </template>
 
 <script>
+import NoItem from '@/components/common/NoItem'
+
 export default {
   name: 'stepperContentGpsSearch',
   props: ['addModalListLoading'],
+  components: {
+    'no-item': NoItem
+  },
   data () {
     return {
       locationAvailable: true,

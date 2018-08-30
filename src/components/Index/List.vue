@@ -50,7 +50,7 @@
       <v-layout
         v-else
       >
-        <no-item text="表示できるアイテムがありません" />
+        <no-item layout="fixed" text="表示できるアイテムがありません" />
       </v-layout>
     </v-container>
 
