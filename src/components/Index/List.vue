@@ -114,9 +114,6 @@ export default {
 .v-card__media__content {
   background: rgba(0,0,0,0.3);
 }
-</style>
-
-<style scoped>
 .v-card__actions__left {
   font-size: 10px;
 }
