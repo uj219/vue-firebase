@@ -45,9 +45,15 @@ export default {
       addModal: false
     }
   },
+  created () {
+    this.syncHeader('recent')
+  },
   methods: {
     sortList (sort) {
       this.$emit('sortList', sort)
+    },
+    syncHeader (pageTitle) {
+      this.$emit('syncHeader', pageTitle)
     },
     syncAddModal (bool) {
       this.addModal = bool
