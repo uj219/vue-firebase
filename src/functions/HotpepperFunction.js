@@ -10,7 +10,7 @@ export function getListHotpepper (options) {
     format: 'json'
   }, options)
 
-  return axios.get('http://webservice.recruit.co.jp/hotpepper/gourmet/v1/', {params: params})
+  return axios.get('https://webservice.recruit.co.jp/hotpepper/gourmet/v1/', {params: params})
     .then((response) => {
       return response.data.results
     }).catch((error) => {
@@ -30,7 +30,7 @@ export function getAreaHotpepper (area, options) {
     format: 'json'
   }, options)
 
-  return axios.get(`http://webservice.recruit.co.jp/hotpepper/${area}/v1/`, {params: params})
+  return axios.get(`https://webservice.recruit.co.jp/hotpepper/${area}/v1/`, {params: params})
     .then((response) => {
       return response.data.results[area]
     }).catch((error) => {
