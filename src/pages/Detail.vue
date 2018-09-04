@@ -54,7 +54,7 @@
         scrolling="no"
         marginheight="0"
         marginwidth="0"
-        :src="`http://maps.google.co.jp/maps?q=${item.data.name}@${item.data.lat},${item.data.lng}&output=embed`"
+        :src="`https://maps.google.co.jp/maps?q=${item.data.name}@${item.data.lat},${item.data.lng}&output=embed`"
       ></iframe>
       <p class="caption mb-4">
         <v-icon size="12">place</v-icon>
@@ -127,7 +127,7 @@ export default {
   padding-top: 56px;
   padding-bottom: 30px;
 }
-.v-footer {
+.theme--light .v-footer {
   background: transparent;
 }
 .mainImg {

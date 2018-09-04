@@ -76,7 +76,7 @@ export default {
 </script>
 
 <style scoped>
-.v-footer {
+.theme--light .v-footer {
   background: transparent;
 }
 </style>
