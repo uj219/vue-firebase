@@ -282,10 +282,10 @@ a {
   text-decoration: none!important;
   color: inherit;
 }
-.theme--light .v-toolbar {
+.theme--light .v-toolbar:not(.primary) {
   background-color: rgba(255, 255, 255, 0.8);
 }
-.theme--light .v-bottom-nav {
+.theme--light .v-bottom-nav:not(.primary) {
   background-color: rgba(255, 255, 255, 0.95);
 }
 </style>

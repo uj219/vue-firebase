@@ -42,7 +42,7 @@
               <div class="v-card__actions__left">
                 <span>
                   <v-icon>place</v-icon>
-                  <span v-if="location.available" class="d-inline">{{item.distance}}</span>
+                  <span v-if="location.available" class="d-inline">{{item.distance}}m</span>
                   <span v-else class="d-inline">-</span>
                 </span>
 
